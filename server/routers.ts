@@ -6,6 +6,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { createSharedTrip, getSharedTrip, upsertSharedTrip, saveUserTripData, getUserTripData, createRecommendedSpot, searchRecommendedSpots } from "./db";
 import { storagePut } from "./storage";
+import { makeRequest, type GeocodingResult, type PlacesSearchResult } from "./_core/map.js";
 
 // バグ2修正: Nominatim レートリミット対策 - 目的地名→座標のインメモリキャッシュ
 // 同一目的地への並列リクエスト時にNominatimを1回だけ呼ぶ
@@ -160,48 +161,47 @@ export const appRouter = router({
           let address: string | null = null;   // 住所（都道府県～番地）
           let placeName: string | null = null; // 施設名（タイトルに使う）
 
-          // ヘルパー: 全角→半角変換
-          const normalizeJp = (s: string) =>
-            s.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
-             .replace(/[－−‐―]/g, '-')
-             .replace(/[　]/g, ' ')
-             .trim();
-
-          // ヘルパー: Nominatim検索（全角→半角変換済みのクエリを使用）
-          const tryNominatim = async (q: string): Promise<{ lat: string; lng: string } | null> => {
+          // ヘルパー: 施設名でGoogle Maps Places Text Search
+          const tryPlaceSearch = async (q: string): Promise<{ lat: string; lng: string } | null> => {
             try {
-              const normalized = normalizeJp(q);
-              const params = new URLSearchParams({
-                format: 'json', q: normalized, limit: '1',
-                'accept-language': 'ja', addressdetails: '0', countrycodes: 'jp',
+              const data = await makeRequest<PlacesSearchResult>('/maps/api/place/textsearch/json', {
+                query: q, language: 'ja',
               });
-              const res = await fetch(
-                `https://nominatim.openstreetmap.org/search?${params}`,
-                { headers: { 'User-Agent': 'TabiShiori/1.0', 'Accept-Language': 'ja,en;q=0.9' } }
-              );
-              const data = await res.json();
-              if (data[0]) return { lat: data[0].lat, lng: data[0].lon };
+              if (data.results[0]) {
+                const loc = data.results[0].geometry.location;
+                return { lat: String(loc.lat), lng: String(loc.lng) };
+              }
             } catch (err) {
-              console.warn("[routers] error:", err);
+              console.warn('[geo.resolveMapUrl] place search error:', err);
             }
             return null;
           };
 
-          // ヘルパー: 逆ジオコーディング
-          const reverseGeocode = async (la: string, lo: string): Promise<string | null> => {
+          // ヘルパー: 住所でGoogle Maps Geocoding API
+          const tryGeocode = async (q: string): Promise<{ lat: string; lng: string } | null> => {
             try {
-              const res = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${la}&lon=${lo}&accept-language=ja`,
-                { headers: { 'Accept-Language': 'ja,en;q=0.9' } }
-              );
-              const data = await res.json();
-              if (data?.address) {
-                const a = data.address;
-                const parts = [a.state, a.city || a.town || a.county, a.suburb || a.neighbourhood, a.road].filter(Boolean);
-                return parts.join('') || data.display_name?.split(',').slice(0, 3).join(', ') || null;
+              const data = await makeRequest<GeocodingResult>('/maps/api/geocode/json', {
+                address: q, language: 'ja', region: 'jp',
+              });
+              if (data.results[0]) {
+                const loc = data.results[0].geometry.location;
+                return { lat: String(loc.lat), lng: String(loc.lng) };
               }
             } catch (err) {
-              console.warn("[routers] error:", err);
+              console.warn('[geo.resolveMapUrl] geocode error:', err);
+            }
+            return null;
+          };
+
+          // ヘルパー: 逆ジオコーディング（Google Maps Geocoding API）
+          const reverseGeocode = async (la: string, lo: string): Promise<string | null> => {
+            try {
+              const data = await makeRequest<GeocodingResult>('/maps/api/geocode/json', {
+                latlng: `${la},${lo}`, language: 'ja',
+              });
+              if (data.results[0]) return data.results[0].formatted_address;
+            } catch (err) {
+              console.warn('[geo.resolveMapUrl] reverse geocode error:', err);
             }
             return null;
           };
@@ -295,45 +295,21 @@ export const appRouter = router({
 
           console.log('[geo.resolveMapUrl] parsed:', { lat, lng, address, placeName });
 
-          // ステップ6: 座標がない場合、Nominatimで検索
+          // ステップ6: 座標がない場合、Google Maps APIで検索
           if (!lat) {
-            // 住所で検索
-            if (address) {
-              const r = await tryNominatim(address);
+            // 施設名＋住所で Places Text Search（最も精度が高い）
+            if (placeName && address) {
+              const r = await tryPlaceSearch(`${placeName} ${address}`);
               if (r) { lat = r.lat; lng = r.lng; }
-
-              // 番地除去して再検索（全角数字対応）
-              // 例: 鹿児島県鹿児島市下荒田３丁目３８−１８ → 鹿児島県鹿児島市下荒田３丁目
-              if (!lat) {
-                // 「丁目」「番地」「号」の後の番地部分を除去
-                const stripped1 = address
-                  .replace(/(丁目|番地|番|号)[\d０-９]+[-−－ー][\d０-９]*/g, '$1') // 丁目38-18 → 丁目
-                  .replace(/(丁目|番地|番|号)[\d０-９]+$/g, '$1')                       // 丁目38 → 丁目
-                  .trim();
-                if (stripped1 !== address && stripped1.length > 3) {
-                  const r2 = await tryNominatim(stripped1);
-                  if (r2) { lat = r2.lat; lng = r2.lng; }
-                }
-              }
-
-              // 丁目までの住所で再検索
-              if (!lat) {
-                const choMeMatch = address.match(/^(.+?丁目)/);
-                if (choMeMatch) {
-                  const r3 = await tryNominatim(choMeMatch[1]);
-                  if (r3) { lat = r3.lat; lng = r3.lng; }
-                }
-              }
             }
-
-            // 施設名で検索
+            // 施設名のみで Places Text Search
             if (!lat && placeName) {
-              const r = await tryNominatim(placeName);
+              const r = await tryPlaceSearch(placeName);
               if (r) { lat = r.lat; lng = r.lng; }
             }
-            // 住所+施設名全体で検索
-            if (!lat && address && placeName) {
-              const r = await tryNominatim(`${address} ${placeName}`);
+            // 住所で Geocoding API
+            if (!lat && address) {
+              const r = await tryGeocode(address);
               if (r) { lat = r.lat; lng = r.lng; }
             }
           }
@@ -365,78 +341,37 @@ export const appRouter = router({
           const { query, destination } = input;
           if (!query.trim()) return { places: [] };
 
-          // カテゴリ推定（OSMタグからマッピング）
-          const guessCategory = (tags: Record<string, string>): string => {
-            const a = tags.amenity || '';
-            const t = tags.tourism || '';
-            const s = tags.shop || '';
-            if (['restaurant','cafe','bar','fast_food','food_court','izakaya','sushi'].some(v => a.includes(v))) return '食事';
-            if (['hotel','motel','hostel','ryokan','guest_house'].some(v => (a+t).includes(v))) return '宿泊';
-            if (['attraction','museum','zoo','aquarium','gallery','artwork'].some(v => t.includes(v))) return '観光';
-            if (['station','airport','bus_station','ferry_terminal'].some(v => a.includes(v))) return '移動';
-            if (s) return '買物';
-            if (t) return '観光';
+          // カテゴリ推定（Google Maps types からマッピング）
+          const guessCategory = (types: string[]): string => {
+            if (types.some(t => ['restaurant','cafe','bar','food','bakery','meal_takeaway','meal_delivery','izakaya_restaurant','sushi_restaurant'].includes(t))) return '食事';
+            if (types.some(t => ['lodging','hotel','motel'].includes(t))) return '宿泊';
+            if (types.some(t => ['tourist_attraction','museum','zoo','aquarium','art_gallery','amusement_park','shrine','temple','church','place_of_worship'].includes(t))) return '観光';
+            if (types.some(t => ['transit_station','train_station','subway_station','bus_station','airport'].includes(t))) return '移動';
+            if (types.some(t => ['store','shopping_mall','supermarket','convenience_store','department_store','clothing_store'].includes(t))) return '買物';
             return 'その他';
-          }
+          };
 
           // 検索クエリを構築（旅行先を付加することで地域優先）
           const searchQ = destination ? `${query} ${destination}` : query;
 
-          // Nominatim で最大5件取得
-          const params = new URLSearchParams({
-            q: searchQ,
-            format: 'jsonv2',
-            addressdetails: '1',
-            extratags: '1',
-            namedetails: '1',
-            limit: '5',
-            'accept-language': 'ja',
+          // Google Maps Places Text Search で最大5件取得
+          const data = await makeRequest<PlacesSearchResult>('/maps/api/place/textsearch/json', {
+            query: searchQ,
+            language: 'ja',
           });
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/search?${params}`,
-            { headers: {
-                'User-Agent': 'TabiShiori/1.0 (travel planner app)',
-                'Accept-Language': 'ja,en;q=0.9',
-            }}
-          );
-          if (!res.ok) return { places: [] };
-          const data = await res.json() as Array<{
-            place_id: number;
-            display_name: string;
-            name?: string;
-            lat: string;
-            lon: string;
-            address?: Record<string, string>;
-            extratags?: Record<string, string>;
-          }>;
 
-          const places = data.map(item => {
-            // 住所を整形（都道府県〜番地）
-            const addr = item.address || {};
-            const parts = [
-              addr.state || addr.province,
-              addr.city || addr.town || addr.village || addr.county,
-              addr.suburb || addr.neighbourhood || addr.quarter,
-              addr.road,
-              addr.house_number,
-            ].filter(Boolean);
-            const address = parts.length > 0 ? parts.join('') : item.display_name.split(',').slice(0, 3).join(',');
-
-            // 施設名（name > display_nameの先頭部分）
-            const name = item.name || item.display_name.split(',')[0];
-
-            // Google Maps 検索URL（place_idではなくlat,lngを使用して精度向上）
-            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + address)}`;
-
-            // カテゴリ
-            const category = guessCategory(item.extratags || {});
-
-            return { name, address, category, mapsUrl, lat: item.lat, lng: item.lon };
-          });
+          const places = (data.results || []).slice(0, 5).map(item => ({
+            name: item.name,
+            address: item.formatted_address,
+            category: guessCategory(item.types),
+            mapsUrl: `https://www.google.com/maps/place/?q=place_id:${item.place_id}`,
+            lat: String(item.geometry.location.lat),
+            lng: String(item.geometry.location.lng),
+          }));
 
           return { places };
         } catch (e) {
-          console.error('[places.search] Nominatim error:', e);
+          console.error('[places.search] error:', e);
           return { places: [] };
         }
       }),
@@ -466,26 +401,21 @@ export const appRouter = router({
           return n.replace(/\s*\d+-\d+.*$/, '').trim();
         };
 
-        const tryNominatim = async (q: string): Promise<{ lat: string; lng: string; displayName: string } | null> => {
-          const params = new URLSearchParams({
-            format: 'json',
-            q,
-            limit: '1',
-            'accept-language': 'ja',
-            addressdetails: '1',
-            countrycodes: 'jp',
-          });
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/search?${params}`,
-            { headers: { 'User-Agent': 'TabiShiori/1.0 (travel planning app)', 'Accept-Language': 'ja,en;q=0.9' } }
-          );
-          const data = await res.json();
-          if (data[0]) {
-            return {
-              lat: parseFloat(data[0].lat).toFixed(6),
-              lng: parseFloat(data[0].lon).toFixed(6),
-              displayName: data[0].display_name.split(',').slice(0, 3).join(', '),
-            };
+        const tryGeocode = async (q: string): Promise<{ lat: string; lng: string; displayName: string } | null> => {
+          try {
+            const data = await makeRequest<GeocodingResult>('/maps/api/geocode/json', {
+              address: q, language: 'ja', region: 'jp',
+            });
+            if (data.results[0]) {
+              const loc = data.results[0].geometry.location;
+              return {
+                lat: loc.lat.toFixed(6),
+                lng: loc.lng.toFixed(6),
+                displayName: data.results[0].formatted_address,
+              };
+            }
+          } catch (err) {
+            console.warn('[geocode.byAddress] error:', err);
           }
           return null;
         };
@@ -499,12 +429,8 @@ export const appRouter = router({
         if (raw !== normalized) candidates.push(raw);
 
         for (const q of candidates) {
-          try {
-            const result = await tryNominatim(q);
-            if (result) return result;
-          } catch (err) {
-              console.warn("[routers] error:", err);
-            }
+          const result = await tryGeocode(q);
+          if (result) return result;
         }
 
         return { lat: null, lng: null, displayName: null };
@@ -620,23 +546,17 @@ export const appRouter = router({
                 lat = cached.lat;
                 lng = cached.lng;
               } else {
-                const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(firstLocation)}&format=json&limit=1`;
-                let geoData: any;
                 try {
-                  const controller2 = new AbortController();
-                  const timeout2 = setTimeout(() => controller2.abort(), 10000);
-                  const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'tabi-shiori/1.0' }, signal: controller2.signal });
-                  clearTimeout(timeout2);
-                  geoData = await geoRes.json();
-                } catch {
-                  const { execSync } = await import('child_process');
-                  const raw2 = execSync(`curl -s --max-time 10 -A "tabi-shiori/1.0" "${geoUrl}"`, { encoding: 'utf8' });
-                  geoData = JSON.parse(raw2);
-                }
-                if (geoData?.[0]) {
-                  lat = parseFloat(geoData[0].lat);
-                  lng = parseFloat(geoData[0].lon);
-                  geoCache.set(firstLocation, { lat, lng });
+                  const geoData = await makeRequest<GeocodingResult>('/maps/api/geocode/json', {
+                    address: firstLocation, language: 'ja',
+                  });
+                  if (geoData.results[0]) {
+                    lat = geoData.results[0].geometry.location.lat;
+                    lng = geoData.results[0].geometry.location.lng;
+                    geoCache.set(firstLocation, { lat, lng });
+                  }
+                } catch (geoErr2) {
+                  console.warn('[weather.getForecast] geocode error:', geoErr2);
                 }
               }
             } catch (geoErr) {
@@ -720,7 +640,6 @@ export const appRouter = router({
       .input(z.object({ origin: z.string(), destination: z.string(), mode: z.enum(['driving', 'walking', 'bicycling', 'transit']) }))
       .mutation(async ({ input }) => {
         try {
-          const { makeRequest } = await import('./_core/map.js');
           // transitモードはDistance Matrix APIでZERO_RESULTSになるため、drivingにフォールバック
           const effectiveMode = input.mode === 'transit' ? 'driving' : input.mode;
           // Distance Matrix APIを使用（Directions APIより安定）
@@ -917,21 +836,18 @@ export const appRouter = router({
 
           const parsed = JSON.parse(llmRes.choices[0].message.content as string);
 
-          // 住所があればNominatimで座標取得
+          // 住所があればGoogle Maps Geocoding APIで座標取得
           let lat = "";
           let lng = "";
           if (parsed.address) {
             try {
-              const params = new URLSearchParams({
-                format: "json", q: parsed.address, limit: "1",
-                "accept-language": "ja", countrycodes: "jp",
+              const geoData = await makeRequest<GeocodingResult>('/maps/api/geocode/json', {
+                address: parsed.address, language: 'ja', region: 'jp',
               });
-              const geoRes = await fetch(
-                `https://nominatim.openstreetmap.org/search?${params}`,
-                { headers: { "User-Agent": "TabiShiori/1.0" } }
-              );
-              const geoData = await geoRes.json();
-              if (geoData[0]) { lat = geoData[0].lat; lng = geoData[0].lon; }
+              if (geoData.results[0]) {
+                lat = String(geoData.results[0].geometry.location.lat);
+                lng = String(geoData.results[0].geometry.location.lng);
+              }
             } catch { /* 座標取得失敗は無視 */ }
           }
 
