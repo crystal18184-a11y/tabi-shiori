@@ -206,9 +206,15 @@ export const appRouter = router({
             return null;
           };
 
-          // ステップ1: @lat,lng パターンで座標抽出
-          const atMatch = resolvedUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-          if (atMatch) { lat = atMatch[1]; lng = atMatch[2]; }
+          // ステップ1: !3d / !4d パターンで正確な場所座標を抽出（@lat,lngより精度高い）
+          const placeCoordsMatch = resolvedUrl.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+          if (placeCoordsMatch) { lat = placeCoordsMatch[1]; lng = placeCoordsMatch[2]; }
+
+          // @lat,lng パターン（表示中心、!3dがない場合のフォールバック）
+          if (!lat) {
+            const atMatch = resolvedUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+            if (atMatch) { lat = atMatch[1]; lng = atMatch[2]; }
+          }
 
           // ?q=lat,lng パターン
           if (!lat) {
@@ -403,8 +409,10 @@ export const appRouter = router({
 
         const tryGeocode = async (q: string): Promise<{ lat: string; lng: string; displayName: string } | null> => {
           try {
+            // 日本語文字を含む入力のみ region:'jp' でバイアス。海外の住所/地名はバイアスを外す
+            const isJa = /[぀-ヿ㐀-鿿]/.test(q);
             const data = await makeRequest<GeocodingResult>('/maps/api/geocode/json', {
-              address: q, language: 'ja', region: 'jp',
+              address: q, language: 'ja', region: isJa ? 'jp' : undefined,
             });
             if (data.results[0]) {
               const loc = data.results[0].geometry.location;
@@ -566,17 +574,17 @@ export const appRouter = router({
           if (!lat || !lng) {
             return { ok: false as const, error: '座標を取得できませんでした' };
           }
-          const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=Asia%2FTokyo&start_date=${input.date}&end_date=${input.date}`;
-          // Node.js fetchがブロックされる場合はcurlフォールバックを使用
+          // timezone=auto で緯度経度から現地TZを自動判定（海外の日付ズレを防ぐ）
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto&start_date=${input.date}&end_date=${input.date}`;
+          // 一部環境ではNodeのfetchがopen-meteoに到達できずタイムアウトするためcurlにフォールバック
           let data: any;
           try {
             const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 10000);
+            const timeout = setTimeout(() => controller.abort(), 5000);
             const res = await fetch(url, { signal: controller.signal });
             clearTimeout(timeout);
             data = await res.json();
           } catch {
-            // curlフォールバック
             const { execSync } = await import('child_process');
             const raw = execSync(`curl -s --max-time 10 "${url}"`, { encoding: 'utf8' });
             data = JSON.parse(raw);
