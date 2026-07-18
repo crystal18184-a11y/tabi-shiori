@@ -12,4 +12,7 @@ export const ENV = {
   ownerOpenId: process.env.OWNER_OPEN_ID ?? "",
   isProduction: process.env.NODE_ENV === "production",
   googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY ?? "",
+  // Manusテンプレ由来のLLM/ストレージ/通知プロキシ用（設定時のみ各機能が有効）
+  forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
+  forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
 };
