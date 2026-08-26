@@ -32,9 +32,12 @@ export default function LeafletMap({ trip, mapMode, currentDid, focusEventId, on
         attributionControl: false,
         scrollWheelZoom: true,
       });
-      L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png", {
-        maxZoom: 19,
-        attribution: "Wikimedia | &copy; OpenStreetMap contributors",
+      L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom: 16,
+        attribution: "&copy; Esri",
+      }).addTo(mapRef.current);
+      L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom: 16,
       }).addTo(mapRef.current);
       L.control.attribution({ position: "bottomright", prefix: false }).addTo(mapRef.current);
     }
