@@ -32,9 +32,10 @@ export default function LeafletMap({ trip, mapMode, currentDid, focusEventId, on
         attributionControl: false,
         scrollWheelZoom: true,
       });
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
-        subdomains: "abcd",
+        subdomains: "abc",
+        attribution: "&copy; OpenStreetMap contributors",
       }).addTo(mapRef.current);
       L.control.attribution({ position: "bottomright", prefix: false }).addTo(mapRef.current);
     }
