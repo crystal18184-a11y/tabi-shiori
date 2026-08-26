@@ -16,3 +16,27 @@ export const ENV = {
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
 };
+
+// 起動に必須の環境変数。未設定のまま起動すると分かりにくいスタックトレースで
+// 落ちるため、ここでまとめて検証し、明確なメッセージで即座に終了させる。
+const REQUIRED_ENV_KEYS = [
+  "DATABASE_URL",
+  "JWT_SECRET",
+  "OAUTH_SERVER_URL",
+  "OWNER_OPEN_ID",
+  "VITE_APP_ID",
+] as const;
+
+export function validateEnv(): void {
+  const missing = REQUIRED_ENV_KEYS.filter(key => !process.env[key]);
+  if (missing.length > 0) {
+    console.error("[ENV] 起動失敗: 以下の環境変数が未設定です:");
+    for (const key of missing) {
+      console.error(`  - ${key}`);
+    }
+    console.error(
+      "[ENV] .env.local / .env、またはデプロイ先(Railway)の環境変数設定を確認してください。"
+    );
+    process.exit(1);
+  }
+}

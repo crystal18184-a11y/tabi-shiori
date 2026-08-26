@@ -2,6 +2,8 @@ import { config as dotenvConfig } from "dotenv";
 dotenvConfig({ path: ".env.local" }); // ローカル設定優先
 dotenvConfig();                        // .env をフォールバック
 console.log('[config] GOOGLE_MAPS_API_KEY:', process.env.GOOGLE_MAPS_API_KEY ? '✓ 設定済み' : '✗ 未設定');
+import { validateEnv } from "./env";
+validateEnv();
 import express from "express";
 import { createServer } from "http";
 import net from "net";

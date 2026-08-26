@@ -3,10 +3,15 @@ import fs from "fs";
 import { type Server } from "http";
 import { nanoid } from "nanoid";
 import path from "path";
-import { createServer as createViteServer } from "vite";
-import viteConfig from "../../vite.config";
 
 export async function setupVite(app: Express, server: Server) {
+  // vite / vite.config は開発時にしか使わないため動的importにする。
+  // トップレベルで静的importすると、esbuildが本番バンドルにも
+  // vite.config.ts の中身(import.meta.dirname を使った設定)を含めてしまい、
+  // 本番Node環境でimport.meta.dirnameが未対応だとクラッシュする。
+  const [{ createServer: createViteServer }, { default: viteConfig }] =
+    await Promise.all([import("vite"), import("../../vite.config")]);
+
   const serverOptions = {
     middlewareMode: true,
     hmr: { server },
