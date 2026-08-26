@@ -19,13 +19,9 @@ export const ENV = {
 
 // 起動に必須の環境変数。未設定のまま起動すると分かりにくいスタックトレースで
 // 落ちるため、ここでまとめて検証し、明確なメッセージで即座に終了させる。
-const REQUIRED_ENV_KEYS = [
-  "DATABASE_URL",
-  "JWT_SECRET",
-  "OAUTH_SERVER_URL",
-  "OWNER_OPEN_ID",
-  "VITE_APP_ID",
-] as const;
+// OAUTH_SERVER_URL / VITE_APP_ID / OWNER_OPEN_ID はログイン機能専用で、
+// 現状どのAPIもログイン必須(protectedProcedure)にしていないため任意項目とする。
+const REQUIRED_ENV_KEYS = ["DATABASE_URL", "JWT_SECRET"] as const;
 
 export function validateEnv(): void {
   const missing = REQUIRED_ENV_KEYS.filter(key => !process.env[key]);
