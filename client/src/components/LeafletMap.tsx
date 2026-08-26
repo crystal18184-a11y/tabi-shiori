@@ -32,10 +32,9 @@ export default function LeafletMap({ trip, mapMode, currentDid, focusEventId, on
         attributionControl: false,
         scrollWheelZoom: true,
       });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png", {
         maxZoom: 19,
-        subdomains: "abc",
-        attribution: "&copy; OpenStreetMap contributors",
+        attribution: "Wikimedia | &copy; OpenStreetMap contributors",
       }).addTo(mapRef.current);
       L.control.attribution({ position: "bottomright", prefix: false }).addTo(mapRef.current);
     }
