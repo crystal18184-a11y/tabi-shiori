@@ -202,13 +202,6 @@ export default function TabiApp() {
     }
   }, [t, startSharing]);
 
-  const handleCopyShareUrl = useCallback(() => {
-    if (!shareCode) return;
-    navigator.clipboard.writeText(`${location.origin}${location.pathname}?share=${shareCode}`)
-      .then(() => { setShareStatus("✅ 共有URLをコピーしました！"); setShareStatusOk(true); })
-      .catch(() => { setShareStatus("❌ コピーに失敗しました"); setShareStatusOk(false); });
-  }, [shareCode]);
-
   const handleJoinSharing = useCallback(async () => {
     const code = joinCode.trim().toUpperCase();
     if (!code) { setShareStatus("コードを入力してください"); setShareStatusOk(false); return; }
@@ -522,8 +515,7 @@ export default function TabiApp() {
                       <span className="font-mono text-2xl font-black text-green-800 tracking-widest flex-1">{shareCode}</span>
                       <button onClick={() => { navigator.clipboard.writeText(shareCode); toast("コードをコピーしました！", "#10b981"); }} className="bg-white border border-green-200 rounded-lg text-green-800 px-2.5 py-1 text-xs cursor-pointer hover:bg-green-50">コピー</button>
                     </div>
-                    <button onClick={handleCopyShareUrl} className="w-full bg-white border border-green-200 rounded-lg text-green-800 py-1.5 text-xs font-semibold cursor-pointer hover:bg-green-50">🔗 共有URLをコピー</button>
-                    <div className="text-[10px] text-green-700 mt-1.5 leading-relaxed">変更は約5秒ごとに自動同期されます。</div>
+                    <div className="text-[10px] text-green-700 leading-relaxed">このコードを共有相手に伝えてください。変更は約5秒ごとに自動同期されます。</div>
                     <button onClick={() => { stopSharing(); setShareStatus(""); }} className="mt-2 bg-transparent border-none text-slate-400 text-xs cursor-pointer p-0 hover:text-slate-600">共有を停止する</button>
                   </div>
                 )}
