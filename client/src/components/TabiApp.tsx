@@ -672,11 +672,13 @@ function SortableDayTab({ day, index, isActive, onSelect, onDel, onEdit, destina
 }) {
   const color = DC[index % DC.length];
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: day.id });
+  // touch-action の抑止はドラッグハンドル(⠇)側だけに付ける。タブ全体に付けると
+  // タブ上のタッチがすべて奪われ、日数が多いときにタブバーを横スクロールできない
   return (
     <div
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1, zIndex: isDragging ? 999 : undefined, touchAction: "none" }}
-      className="relative inline-flex"
+      style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1, zIndex: isDragging ? 999 : undefined }}
+      className="relative inline-flex flex-shrink-0"
     >
       <div
         role="tab"
@@ -726,9 +728,9 @@ function DayTabBar({ days, activeDayId, onSelectDay, onDelDay, onAddDay, onEditD
             ))}
           </SortableContext>
         </DndContext>
-        <button onClick={onAddDay} aria-label="日程を追加" className="bg-transparent border border-dashed border-slate-300 rounded-t-lg text-slate-400 px-2.5 py-1.5 cursor-pointer text-xs self-end whitespace-nowrap hover:border-blue-300 hover:text-blue-400 transition-colors">＋ 日追加</button>
+        <button onClick={onAddDay} aria-label="日程を追加" className="bg-transparent border border-dashed border-slate-300 rounded-t-lg text-slate-400 px-2.5 py-1.5 cursor-pointer text-xs self-end whitespace-nowrap flex-shrink-0 hover:border-blue-300 hover:text-blue-400 transition-colors">＋ 日追加</button>
         {days.some(d => d.date) && (
-          <button onClick={onSortByDate} title="日付順に並び替え" className="bg-transparent border border-slate-200 rounded-t-lg text-slate-500 px-2 py-1.5 cursor-pointer text-[10px] self-end whitespace-nowrap hover:bg-slate-50 transition-colors">🗓️ 日付順</button>
+          <button onClick={onSortByDate} title="日付順に並び替え" className="bg-transparent border border-slate-200 rounded-t-lg text-slate-500 px-2 py-1.5 cursor-pointer text-[10px] self-end whitespace-nowrap flex-shrink-0 hover:bg-slate-50 transition-colors">🗓️ 日付順</button>
         )}
       </div>
     </div>
