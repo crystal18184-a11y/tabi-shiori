@@ -372,16 +372,16 @@ export default function TabiApp() {
             )}
             {tab === "map" && (
               <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-                <div className="flex gap-1.5 px-2.5 py-1.5 bg-slate-50 border-b border-slate-200 items-center flex-shrink-0 flex-wrap">
+                <div className="flex gap-1.5 px-2.5 py-1.5 bg-m3-surface-variant border-b border-m3-outline-variant items-center flex-shrink-0 flex-wrap">
                   <button
                     onClick={() => setMapMode("all")}
                     aria-pressed={mapMode === "all"}
-                    className={`px-2 py-1 text-xs font-semibold rounded-lg border transition-colors ${mapMode === "all" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-400 border-slate-200 hover:border-slate-300"}`}
+                    className={`px-2 py-1 text-xs font-semibold rounded-lg border transition-colors ${mapMode === "all" ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface text-m3-on-surface-variant border-m3-outline hover:border-m3-primary"}`}
                   >🌐 全日程</button>
                   <button
                     onClick={() => setMapMode("day")}
                     aria-pressed={mapMode === "day"}
-                    className={`px-2 py-1 text-xs font-semibold rounded-lg border transition-colors ${mapMode === "day" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-400 border-slate-200 hover:border-slate-300"}`}
+                    className={`px-2 py-1 text-xs font-semibold rounded-lg border transition-colors ${mapMode === "day" ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface text-m3-on-surface-variant border-m3-outline hover:border-m3-primary"}`}
                   >📅 この日</button>
                   {(() => {
                     const poolWithCoords = (mapMode === "all"
@@ -403,7 +403,7 @@ export default function TabiApp() {
                     onClick={() => setMapSidebarOpen(v => !v)}
                     aria-label={mapSidebarOpen ? "スポットリストを閉じる" : "スポットリストを開く"}
                     aria-expanded={mapSidebarOpen}
-                    className="absolute top-1/2 -translate-y-1/2 z-[500] bg-white border border-slate-200 rounded-l-md w-5 h-12 cursor-pointer flex items-center justify-center shadow-md text-slate-500 text-xs transition-[right]"
+                    className="absolute top-1/2 -translate-y-1/2 z-[500] bg-m3-surface border border-m3-outline-variant rounded-l-md w-5 h-12 cursor-pointer flex items-center justify-center m3-elevation-2 text-m3-on-surface-variant text-xs transition-[right]"
                     style={{ right: mapSidebarOpen ? 190 : 0, transitionDuration: "250ms" }}
                   >{mapSidebarOpen ? "›" : "‹"}</button>
                   <MapSidebar trip={t ?? null} mapMode={mapMode} currentDid={state.did || ""} onFocusEvent={handleMapFocus} isOpen={mapSidebarOpen} />
@@ -460,14 +460,14 @@ export default function TabiApp() {
       {sidebarOpen && (
         <div role="dialog" aria-modal="true" aria-label="旅行一覧" className="fixed inset-0 z-[199]">
           <div onClick={() => setSidebarOpen(false)} className="absolute inset-0 bg-black/35" aria-hidden="true" />
-          <div className="absolute top-0 left-0 w-60 h-full bg-white flex flex-col shadow-xl z-[200]">
-            <div className="flex items-center justify-between px-3 pt-4 pb-2.5 border-b border-slate-100">
-              <span className="font-serif text-base font-bold text-slate-900">✈️ 🌸 旅のしおり</span>
-              <button onClick={() => setSidebarOpen(false)} aria-label="メニューを閉じる" className="bg-transparent border-none text-xl text-slate-400 cursor-pointer hover:text-slate-600">×</button>
+          <div className="absolute top-0 left-0 w-60 h-full bg-m3-surface flex flex-col m3-elevation-2 z-[200]">
+            <div className="flex items-center justify-between px-3 pt-4 pb-2.5 border-b border-m3-outline-variant">
+              <span className="font-serif text-base font-bold text-m3-on-surface">✈️ 🌸 旅のしおり</span>
+              <button onClick={() => setSidebarOpen(false)} aria-label="メニューを閉じる" className="w-7 h-7 flex items-center justify-center bg-transparent border-none text-xl text-m3-on-surface-variant cursor-pointer m3-icon-btn">×</button>
             </div>
             <button
               onClick={() => { setWizardIsFirst(false); setWizardOpen(true); setSidebarOpen(false); }}
-              className="mx-2.5 my-2 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-sm rounded-xl cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all"
+              className="mx-2.5 my-2 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-sm rounded-xl cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all m3-elevation-1"
             >＋ 旅行を追加</button>
             <nav aria-label="旅行一覧" className="flex-1 overflow-y-auto px-1.5">
               {state.trips.map(tr => (
@@ -478,15 +478,15 @@ export default function TabiApp() {
                   onClick={() => { selTrip(tr.id); setSidebarOpen(false); }}
                   onKeyDown={e => e.key === "Enter" && (selTrip(tr.id), setSidebarOpen(false))}
                   aria-current={tr.id === state.tid ? "true" : undefined}
-                  className={`flex items-center gap-1.5 px-2 py-2 rounded-lg cursor-pointer transition-colors ${tr.id === state.tid ? "bg-blue-50" : "hover:bg-slate-50"}`}
+                  className={`flex items-center gap-1.5 px-2 py-2 rounded-lg cursor-pointer transition-colors ${tr.id === state.tid ? "bg-m3-primary-container" : "hover:bg-m3-surface-variant"}`}
                 >
                   <span>🌏</span>
-                  <span className="flex-1 text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap">{tr.name}</span>
+                  <span className="flex-1 text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap text-m3-on-surface">{tr.name}</span>
                   {state.trips.length > 1 && (
                     <button
                       onClick={e => { e.stopPropagation(); delTrip(tr.id); }}
                       aria-label={`${tr.name}を削除`}
-                      className="bg-transparent border-none text-slate-300 cursor-pointer text-sm hover:text-red-400 transition-colors"
+                      className="bg-transparent border-none text-m3-on-surface-variant cursor-pointer text-sm hover:text-red-400 transition-colors"
                     >×</button>
                   )}
                 </div>
@@ -515,19 +515,19 @@ export default function TabiApp() {
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-[300] p-4"
           onClick={e => e.target === e.currentTarget && setShareModalOpen(false)}
         >
-          <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
-            <div className="flex justify-between items-center px-4 py-3.5 border-b border-slate-100">
-              <h2 id="share-modal-title" className="font-extrabold text-sm text-slate-900">🔗 リアルタイム共有</h2>
-              <button onClick={() => setShareModalOpen(false)} aria-label="閉じる" className="bg-transparent border-none text-xl text-slate-400 cursor-pointer leading-none hover:text-slate-600">×</button>
+          <div className="bg-m3-surface rounded-2xl w-full max-w-sm m3-elevation-2 overflow-hidden">
+            <div className="flex justify-between items-center px-4 py-3.5 border-b border-m3-outline-variant">
+              <h2 id="share-modal-title" className="font-extrabold text-sm text-m3-on-surface">🔗 リアルタイム共有</h2>
+              <button onClick={() => setShareModalOpen(false)} aria-label="閉じる" className="w-7 h-7 flex items-center justify-center bg-transparent border-none text-xl text-m3-on-surface-variant cursor-pointer leading-none m3-icon-btn">×</button>
             </div>
             <div className="p-4 flex flex-col gap-4">
               <div>
-                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">このプランを共有する</div>
+                <div className="text-[11px] font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">このプランを共有する</div>
                 {!shareCode ? (
                   <button
                     onClick={handleStartSharing}
                     disabled={syncing}
-                    className={`w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl py-3 text-sm font-bold transition-all ${syncing ? "opacity-70 cursor-not-allowed" : "hover:from-blue-600 hover:to-indigo-600"}`}
+                    className={`w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl py-3 text-sm font-bold transition-all m3-elevation-1 ${syncing ? "opacity-70 cursor-not-allowed" : "hover:from-blue-600 hover:to-indigo-600"}`}
                   >{syncing ? "⏳ 作成中..." : "🔗 共有コードを発行する"}</button>
                 ) : (
                   <div className="bg-green-50 border border-green-200 rounded-xl p-3">
@@ -537,17 +537,17 @@ export default function TabiApp() {
                       <button onClick={() => { navigator.clipboard.writeText(shareCode); toast("コードをコピーしました！", "#10b981"); }} className="bg-white border border-green-200 rounded-lg text-green-800 px-2.5 py-1 text-xs cursor-pointer hover:bg-green-50">コピー</button>
                     </div>
                     <div className="text-[10px] text-green-700 leading-relaxed">このコードを共有相手に伝えてください。変更は約5秒ごとに自動同期されます。</div>
-                    <button onClick={() => { stopSharing(); setShareStatus(""); }} className="mt-2 bg-transparent border-none text-slate-400 text-xs cursor-pointer p-0 hover:text-slate-600">共有を停止する</button>
+                    <button onClick={() => { stopSharing(); setShareStatus(""); }} className="mt-2 bg-transparent border-none text-m3-on-surface-variant text-xs cursor-pointer p-0 hover:text-m3-on-surface">共有を停止する</button>
                   </div>
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex-1 h-px bg-slate-200" />
-                <span className="text-xs text-slate-400">または</span>
-                <div className="flex-1 h-px bg-slate-200" />
+                <div className="flex-1 h-px bg-m3-outline-variant" />
+                <span className="text-xs text-m3-on-surface-variant">または</span>
+                <div className="flex-1 h-px bg-m3-outline-variant" />
               </div>
               <div>
-                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">友達のコードで参加する</div>
+                <div className="text-[11px] font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">友達のコードで参加する</div>
                 <div className="flex gap-1.5">
                   <input
                     value={joinCode}
@@ -556,12 +556,12 @@ export default function TabiApp() {
                     placeholder="例: AB12CD34"
                     maxLength={8}
                     aria-label="共有コードを入力"
-                    className="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 text-base px-3 py-2 outline-none font-mono tracking-widest uppercase focus:border-blue-300"
+                    className="flex-1 bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-m3-on-surface text-base px-3 py-2 outline-none font-mono tracking-widest uppercase focus:border-m3-primary"
                   />
                   <button
                     onClick={handleJoinSharing}
                     disabled={syncing || !joinCode.trim()}
-                    className={`rounded-lg px-4 py-2 text-sm font-bold whitespace-nowrap transition-colors ${joinCode.trim() ? "bg-slate-900 text-white hover:bg-slate-700" : "bg-slate-100 text-slate-400 cursor-not-allowed"}`}
+                    className={`rounded-lg px-4 py-2 text-sm font-bold whitespace-nowrap transition-colors ${joinCode.trim() ? "bg-m3-primary text-m3-on-primary hover:opacity-90" : "bg-m3-surface-variant text-m3-on-surface-variant cursor-not-allowed"}`}
                   >参加</button>
                 </div>
               </div>
@@ -606,45 +606,45 @@ export default function TabiApp() {
           className="fixed inset-0 bg-black/45 z-[1000] flex items-center justify-center"
           onClick={e => e.target === e.currentTarget && setDayEditModalOpen(false)}
         >
-          <div className="bg-white rounded-2xl p-5 w-72 shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-m3-surface rounded-2xl p-5 w-72 m3-elevation-2" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
-              <h3 id="day-edit-title" className="font-extrabold text-sm text-slate-900">📅 Dayを編集</h3>
-              <button onClick={() => setDayEditModalOpen(false)} aria-label="閉じる" className="bg-transparent border-none text-lg cursor-pointer text-slate-400 hover:text-slate-600">×</button>
+              <h3 id="day-edit-title" className="font-extrabold text-sm text-m3-on-surface">📅 Dayを編集</h3>
+              <button onClick={() => setDayEditModalOpen(false)} aria-label="閉じる" className="w-7 h-7 flex items-center justify-center bg-transparent border-none text-lg cursor-pointer text-m3-on-surface-variant m3-icon-btn">×</button>
             </div>
             <div className="flex flex-col gap-3">
               <div>
-                <label htmlFor="day-edit-name" className="text-[11px] font-bold text-slate-500 block mb-1">Day名称（任意）</label>
+                <label htmlFor="day-edit-name" className="text-[11px] font-bold text-m3-on-surface-variant block mb-1">Day名称（任意）</label>
                 <input
                   id="day-edit-name"
                   value={dayEditName}
                   onChange={e => setDayEditName(e.target.value)}
                   placeholder="例：東京観光日"
-                  className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-sm outline-none box-border focus:border-blue-300"
+                  className="w-full bg-m3-surface-variant border border-m3-outline-variant rounded-lg px-2.5 py-2 text-sm outline-none box-border focus:border-m3-primary"
                 />
               </div>
               <div>
-                <label htmlFor="day-edit-date" className="text-[11px] font-bold text-slate-500 block mb-1">日付</label>
+                <label htmlFor="day-edit-date" className="text-[11px] font-bold text-m3-on-surface-variant block mb-1">日付</label>
                 <input
                   id="day-edit-date"
                   type="date"
                   value={dayEditDate}
                   onChange={e => setDayEditDate(e.target.value)}
-                  className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-sm outline-none box-border cursor-pointer focus:border-blue-300"
+                  className="w-full bg-m3-surface-variant border border-m3-outline-variant rounded-lg px-2.5 py-2 text-sm outline-none box-border cursor-pointer focus:border-m3-primary"
                 />
               </div>
               <div>
-                <label htmlFor="day-edit-location" className="text-[11px] font-bold text-slate-500 block mb-1">この日の場所（任意）</label>
+                <label htmlFor="day-edit-location" className="text-[11px] font-bold text-m3-on-surface-variant block mb-1">この日の場所（任意）</label>
                 <input
                   id="day-edit-location"
                   value={dayEditLocation}
                   onChange={e => setDayEditLocation(e.target.value)}
                   placeholder={t?.destination ? `未設定なら「${t.destination}」を使用` : "例：大阪"}
-                  className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-sm outline-none box-border focus:border-blue-300"
+                  className="w-full bg-m3-surface-variant border border-m3-outline-variant rounded-lg px-2.5 py-2 text-sm outline-none box-border focus:border-m3-primary"
                 />
-                <div className="text-[10px] text-slate-400 mt-1">天気表示・スポット検索の地域を、この日だけ変えたいときに設定してください</div>
+                <div className="text-[10px] text-m3-on-surface-variant mt-1">天気表示・スポット検索の地域を、この日だけ変えたいときに設定してください</div>
               </div>
               <div className="flex gap-2 mt-1">
-                <button onClick={() => setDayEditModalOpen(false)} className="flex-1 bg-slate-100 border-none rounded-lg py-2 text-sm font-bold cursor-pointer text-slate-500 hover:bg-slate-200 transition-colors">キャンセル</button>
+                <button onClick={() => setDayEditModalOpen(false)} className="flex-1 bg-m3-surface-variant border-none rounded-lg py-2 text-sm font-bold cursor-pointer text-m3-on-surface-variant hover:bg-m3-outline-variant transition-colors">キャンセル</button>
                 <button onClick={handleDayEditSave} className="flex-[2] bg-gradient-to-r from-blue-500 to-indigo-500 border-none rounded-lg py-2 text-sm font-bold cursor-pointer text-white hover:from-blue-600 hover:to-indigo-600 transition-all">保存</button>
               </div>
               {t && t.days.some(d => d.date) && (
@@ -1016,7 +1016,7 @@ function PoolView({ pool, onEdit, onDel, onAddToTimeline, onAddToRecommended, on
       <button
         onClick={onAddSpot}
         aria-label="スポットを追加"
-        className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl py-2.5 text-sm font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all flex items-center justify-center gap-1.5"
+        className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl py-2.5 text-sm font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all flex items-center justify-center gap-1.5 m3-elevation-1"
       >
         ＋ スポット追加
       </button>
@@ -1035,7 +1035,7 @@ function PoolView({ pool, onEdit, onDel, onAddToTimeline, onAddToRecommended, on
           </div>
         </div>
         {!pool.length && (
-          <div className="flex flex-col items-center gap-2.5 py-5 text-slate-400">
+          <div className="flex flex-col items-center gap-2.5 py-5 text-m3-on-surface-variant">
             <div className="text-4xl">🗺️</div>
             <p className="text-sm">スポットを追加してみよう</p>
           </div>
@@ -1048,10 +1048,10 @@ function PoolView({ pool, onEdit, onDel, onAddToTimeline, onAddToRecommended, on
             <div className="flex items-center gap-1.5 mb-1.5">
               <span>{cfg.i}</span>
               <span style={{ color: cfg.c }} className="font-bold text-xs">{k}</span>
-              <span className="text-[10px] text-slate-400 bg-slate-100 rounded-full px-1.5">{items.length}件</span>
+              <span className="text-[10px] text-m3-on-surface-variant bg-m3-surface-variant rounded-full px-1.5">{items.length}件</span>
             </div>
             {items.map(p => (
-              <article key={p.id} className="bg-white rounded-xl px-3 py-2.5 mb-2 border border-slate-200 shadow-sm">
+              <article key={p.id} className="bg-m3-surface rounded-xl px-3 py-2.5 mb-2 border border-m3-outline-variant m3-elevation-1">
                 <div className="flex justify-between items-center mb-1.5">
                   <span style={{ background: cfg.c + "18", color: cfg.c, borderColor: cfg.c + "40" }} className="inline-flex gap-1 text-[10px] font-bold rounded-full px-2 py-0.5 border">{cfg.i} {k}</span>
                   <div className="flex gap-0.5 items-center flex-wrap">
@@ -1074,14 +1074,14 @@ function PoolView({ pool, onEdit, onDel, onAddToTimeline, onAddToRecommended, on
                         ⭐ おすすめ
                       </button>
                     )}
-                    <button onClick={() => onAddToTimeline(p)} aria-label={p.name + 'をタイムラインに追加'} className="bg-blue-50 border border-blue-200 rounded-md text-blue-500 cursor-pointer text-[10px] font-bold px-2 py-0.5 whitespace-nowrap hover:bg-blue-100 transition-colors">→ タイムライン</button>
-                    <button onClick={() => onEdit(p.id)} aria-label={p.name + 'を編集'} className="bg-transparent border-none cursor-pointer text-sm p-0.5 opacity-50 hover:opacity-100">✏️</button>
-                    <button onClick={() => onDel(p.id)} aria-label={p.name + 'を削除'} className="bg-transparent border-none cursor-pointer text-sm p-0.5 opacity-50 hover:opacity-100">🗑️</button>
+                    <button onClick={() => onAddToTimeline(p)} aria-label={p.name + 'をタイムラインに追加'} className="bg-m3-primary-container border border-transparent rounded-md text-m3-on-primary-container cursor-pointer text-[10px] font-bold px-2 py-0.5 whitespace-nowrap hover:opacity-90 transition-colors">→ タイムライン</button>
+                    <button onClick={() => onEdit(p.id)} aria-label={p.name + 'を編集'} className="w-6 h-6 flex items-center justify-center bg-transparent border-none cursor-pointer text-sm m3-icon-btn">✏️</button>
+                    <button onClick={() => onDel(p.id)} aria-label={p.name + 'を削除'} className="w-6 h-6 flex items-center justify-center bg-transparent border-none cursor-pointer text-sm m3-icon-btn">🗑️</button>
                   </div>
                 </div>
-                <h4 className="text-sm font-bold text-slate-900 mb-0.5">{p.name}</h4>
-                {p.location && <p className="text-[11px] text-slate-400 mb-0.5">📍 {p.location}</p>}
-                {p.memo && <p className="text-xs text-slate-500 leading-relaxed whitespace-pre-wrap mb-1">{p.memo}</p>}
+                <h4 className="text-sm font-bold text-m3-on-surface mb-0.5">{p.name}</h4>
+                {p.location && <p className="text-[11px] text-m3-on-surface-variant mb-0.5">📍 {p.location}</p>}
+                {p.memo && <p className="text-xs text-m3-on-surface-variant leading-relaxed whitespace-pre-wrap mb-1">{p.memo}</p>}
                 {p.url && <a href={p.url} target="_blank" rel="noreferrer" className="inline-block text-[11px] text-blue-500 no-underline font-semibold hover:underline">🔗 リンクを開く</a>}
               </article>
             ))}

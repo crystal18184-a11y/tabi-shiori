@@ -47,7 +47,7 @@ export default function TripWizardModal({ onClose, onCreate, isFirstTrip = false
   };
 
   const modalStyle: React.CSSProperties = {
-    background: "#fff",
+    background: "var(--m3-surface)",
     borderRadius: 18,
     width: "100%",
     maxWidth: 420,
@@ -56,17 +56,17 @@ export default function TripWizardModal({ onClose, onCreate, isFirstTrip = false
   };
 
   const lblStyle: React.CSSProperties = {
-    fontSize: 11, fontWeight: 700, color: "#64748b",
+    fontSize: 11, fontWeight: 700, color: "var(--m3-on-surface-variant)",
     textTransform: "uppercase" as const, letterSpacing: ".05em",
     marginBottom: 4, display: "block",
   };
 
   const inpStyle: React.CSSProperties = {
     width: "100%", boxSizing: "border-box" as const,
-    border: "1.5px solid #e2e8f0", borderRadius: 10,
-    padding: "10px 12px", fontSize: 14, color: "#0f172a",
+    border: "1.5px solid var(--m3-outline-variant)", borderRadius: 10,
+    padding: "10px 12px", fontSize: 14, color: "var(--m3-on-surface)",
     outline: "none", fontFamily: "inherit",
-    background: "#f8fafc",
+    background: "var(--m3-surface-variant)",
   };
 
   return (
@@ -132,7 +132,7 @@ export default function TripWizardModal({ onClose, onCreate, isFirstTrip = false
                 }}
                 style={{ ...inpStyle, flex: 1 }}
               />
-              <span style={{ color: "#94a3b8", fontSize: 12, flexShrink: 0 }}>〜</span>
+              <span style={{ color: "var(--m3-on-surface-variant)", fontSize: 12, flexShrink: 0 }}>〜</span>
               <input
                 type="date"
                 value={endDate}
@@ -160,7 +160,7 @@ export default function TripWizardModal({ onClose, onCreate, isFirstTrip = false
             {!isFirstTrip && (
               <button
                 onClick={onClose}
-                style={{ flex: 1, padding: "11px", background: "#f1f5f9", border: "none", borderRadius: 10, color: "#64748b", fontSize: 13, fontWeight: 700, cursor: "pointer" }}
+                style={{ flex: 1, padding: "11px", background: "var(--m3-surface-variant)", border: "none", borderRadius: 10, color: "var(--m3-on-surface-variant)", fontSize: 13, fontWeight: 700, cursor: "pointer" }}
               >
                 キャンセル
               </button>

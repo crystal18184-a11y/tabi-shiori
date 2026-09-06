@@ -177,28 +177,28 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
             {showCandidates && placeCandidates.length > 0 && (
               <div style={{
                 position: "absolute", top: "100%", left: 0, right: 0, zIndex: 400,
-                background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10,
-                boxShadow: "0 8px 24px rgba(0,0,0,.12)", overflow: "hidden", marginTop: 2,
+                background: "var(--m3-surface)", border: "1px solid var(--m3-outline-variant)", borderRadius: 10,
+                boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.08), 0 2px 6px 2px rgb(0 0 0 / 0.1)", overflow: "hidden", marginTop: 2,
               }}>
-                <div style={{ padding: "6px 10px 4px", fontSize: 10, fontWeight: 700, color: "#64748b", borderBottom: "1px solid #f1f5f9" }}>
+                <div style={{ padding: "6px 10px 4px", fontSize: 10, fontWeight: 700, color: "var(--m3-on-surface-variant)", borderBottom: "1px solid var(--m3-outline-variant)" }}>
                   📍 場所候補（クリックで選択）
                 </div>
                 {placeCandidates.map((p, i) => (
                   <div
                     key={i}
                     onClick={() => handleSelectCandidate(p)}
-                    style={{ padding: "8px 12px", cursor: "pointer", borderBottom: "1px solid #f8fafc", display: "flex", flexDirection: "column", gap: 2 }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "#f8fafc")}
+                    style={{ padding: "8px 12px", cursor: "pointer", borderBottom: "1px solid var(--m3-outline-variant)", display: "flex", flexDirection: "column", gap: 2 }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "var(--m3-surface-variant)")}
                     onMouseLeave={e => (e.currentTarget.style.background = "")}
                   >
-                    <span style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>{p.name}</span>
-                    <span style={{ fontSize: 10, color: "#64748b" }}>📍 {p.address}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "var(--m3-on-surface)" }}>{p.name}</span>
+                    <span style={{ fontSize: 10, color: "var(--m3-on-surface-variant)" }}>📍 {p.address}</span>
                     <span style={{ fontSize: 10, color: "#3b82f6" }}>{p.category}</span>
                   </div>
                 ))}
                 <div
                   onClick={() => setShowCandidates(false)}
-                  style={{ padding: "6px 12px", fontSize: 10, color: "#94a3b8", cursor: "pointer", textAlign: "center" }}
+                  style={{ padding: "6px 12px", fontSize: 10, color: "var(--m3-on-surface-variant)", cursor: "pointer", textAlign: "center" }}
                 >閉じる</div>
               </div>
             )}
@@ -214,10 +214,10 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
                   onClick={() => setPriority(k)}
                   style={{
                     flex: 1,
-                    background: priority === k ? v.c : "#f8fafc",
-                    border: `1px solid ${priority === k ? v.c : "#e2e8f0"}`,
+                    background: priority === k ? v.c : "var(--m3-surface-variant)",
+                    border: `1px solid ${priority === k ? v.c : "var(--m3-outline-variant)"}`,
                     borderRadius: 7,
-                    color: priority === k ? "#fff" : "#64748b",
+                    color: priority === k ? "#fff" : "var(--m3-on-surface-variant)",
                     padding: "6px 3px",
                     fontSize: 10,
                     fontWeight: 700,
@@ -232,7 +232,7 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
           <div style={frStyle}>
             <label style={lblStyle}>
               Google Maps URL
-              <span style={{ fontWeight: 400, color: "#94a3b8", marginLeft: 4 }}>（短縮URL maps.app.goo.gl も対応）</span>
+              <span style={{ fontWeight: 400, color: "var(--m3-on-surface-variant)", marginLeft: 4 }}>（短縮URL maps.app.goo.gl も対応）</span>
             </label>
             <div style={{ display: "flex", gap: 6 }}>
               <input
@@ -245,7 +245,7 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
                 {geoLoading ? "⏳" : "🔍"} URL解析
               </button>
             </div>
-            <span style={{ fontSize: 10, color: "#94a3b8", marginTop: 2, lineHeight: 1.5 }}>
+            <span style={{ fontSize: 10, color: "var(--m3-on-surface-variant)", marginTop: 2, lineHeight: 1.5 }}>
               GoogleマップでURLをコピー → 貼り付け → 「🔍 URL解析」で住所を自動取得
             </span>
           </div>
@@ -280,7 +280,7 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
             <textarea value={memo} onChange={e => setMemo(e.target.value)} style={{ ...inpStyle, height: 55, resize: "vertical" }} />
           </div>
         </div>
-        <div style={{ display: "flex", gap: 7, padding: "9px 17px 14px", justifyContent: "flex-end", borderTop: "1px solid #f1f5f9" }}>
+        <div style={{ display: "flex", gap: 7, padding: "9px 17px 14px", justifyContent: "flex-end", borderTop: "1px solid var(--m3-outline-variant)" }}>
           <button onClick={onClose} style={cancelBtnStyle}>キャンセル</button>
           <button onClick={handleSave} style={saveBtnStyle}>保存する</button>
         </div>
@@ -290,11 +290,11 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
 }
 
 const overlayStyle: React.CSSProperties = { position: "fixed", inset: 0, background: "rgba(0,0,0,.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 300, padding: 12 };
-const modalStyle: React.CSSProperties = { background: "#fff", borderRadius: 14, width: "100%", maxWidth: 490, maxHeight: "92vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,.2)", display: "flex", flexDirection: "column" };
-const mHeadStyle: React.CSSProperties = { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "13px 17px 9px", borderBottom: "1px solid #f1f5f9", flexShrink: 0 };
+const modalStyle: React.CSSProperties = { background: "var(--m3-surface)", borderRadius: 14, width: "100%", maxWidth: 490, maxHeight: "92vh", overflowY: "auto", boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.08), 0 2px 6px 2px rgb(0 0 0 / 0.1)", display: "flex", flexDirection: "column" };
+const mHeadStyle: React.CSSProperties = { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "13px 17px 9px", borderBottom: "1px solid var(--m3-outline-variant)", flexShrink: 0 };
 const frStyle: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 4 };
-const lblStyle: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: ".06em" };
-const inpStyle: React.CSSProperties = { background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, color: "#1e293b", fontSize: 13, padding: "7px 9px", outline: "none", width: "100%", fontFamily: "inherit" };
-const geoBtnStyle: React.CSSProperties = { background: "#f1f5f9", border: "1px solid #e2e8f0", borderRadius: 8, color: "#64748b", padding: "7px 9px", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 };
-const cancelBtnStyle: React.CSSProperties = { background: "#f1f5f9", border: "none", borderRadius: 8, color: "#64748b", padding: "7px 15px", fontSize: 12, cursor: "pointer" };
+const lblStyle: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "var(--m3-on-surface-variant)", textTransform: "uppercase", letterSpacing: ".06em" };
+const inpStyle: React.CSSProperties = { background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 8, color: "var(--m3-on-surface)", fontSize: 13, padding: "7px 9px", outline: "none", width: "100%", fontFamily: "inherit" };
+const geoBtnStyle: React.CSSProperties = { background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 8, color: "var(--m3-on-surface-variant)", padding: "7px 9px", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 };
+const cancelBtnStyle: React.CSSProperties = { background: "var(--m3-surface-variant)", border: "none", borderRadius: 8, color: "var(--m3-on-surface-variant)", padding: "7px 15px", fontSize: 12, cursor: "pointer" };
 const saveBtnStyle: React.CSSProperties = { background: "linear-gradient(135deg,#3b82f6,#6366f1)", border: "none", borderRadius: 8, color: "#fff", padding: "7px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer" };

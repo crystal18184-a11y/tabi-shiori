@@ -51,50 +51,50 @@ export default function TripPeriodModal({ onClose, onConfirm }: Props) {
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 400, padding: 16 }}
       onClick={e => e.target === e.currentTarget && onClose()}>
-      <div style={{ background: "#fff", borderRadius: 16, width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(0,0,0,.2)", overflow: "hidden" }}
+      <div style={{ background: "var(--m3-surface)", borderRadius: 16, width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(0,0,0,.2)", overflow: "hidden" }}
         onClick={e => e.stopPropagation()}>
 
         {/* ヘッダー */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px 10px", borderBottom: "1px solid #f1f5f9" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px 10px", borderBottom: "1px solid var(--m3-outline-variant)" }}>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 15, color: "#0f172a" }}>✈️ 旅行期間を設定</div>
-            <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>日程が自動的に作成されます</div>
+            <div style={{ fontWeight: 700, fontSize: 15, color: "var(--m3-on-surface)" }}>✈️ 旅行期間を設定</div>
+            <div style={{ fontSize: 11, color: "var(--m3-on-surface-variant)", marginTop: 2 }}>日程が自動的に作成されます</div>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, color: "#94a3b8", cursor: "pointer", lineHeight: 1 }}>×</button>
+          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, color: "var(--m3-on-surface-variant)", cursor: "pointer", lineHeight: 1 }}>×</button>
         </div>
 
         {/* フォーム */}
         <div style={{ padding: "18px 18px 14px", display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-            <label style={{ fontSize: 11, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: ".06em" }}>出発日</label>
+            <label style={{ fontSize: 11, fontWeight: 700, color: "var(--m3-on-surface-variant)", textTransform: "uppercase", letterSpacing: ".06em" }}>出発日</label>
             <input
               type="date"
               value={startDate}
               onChange={e => { setStartDate(e.target.value); setError(null); }}
-              style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 9, color: "#1e293b", fontSize: 14, padding: "9px 11px", outline: "none", width: "100%", fontFamily: "inherit" }}
+              style={{ background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 9, color: "var(--m3-on-surface)", fontSize: 14, padding: "9px 11px", outline: "none", width: "100%", fontFamily: "inherit" }}
             />
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-            <label style={{ fontSize: 11, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: ".06em" }}>帰着日</label>
+            <label style={{ fontSize: 11, fontWeight: 700, color: "var(--m3-on-surface-variant)", textTransform: "uppercase", letterSpacing: ".06em" }}>帰着日</label>
             <input
               type="date"
               value={endDate}
               min={startDate}
               onChange={e => { setEndDate(e.target.value); setError(null); }}
-              style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 9, color: "#1e293b", fontSize: 14, padding: "9px 11px", outline: "none", width: "100%", fontFamily: "inherit" }}
+              style={{ background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 9, color: "var(--m3-on-surface)", fontSize: 14, padding: "9px 11px", outline: "none", width: "100%", fontFamily: "inherit" }}
             />
           </div>
 
           {/* プレビュー */}
           {days > 0 && (
-            <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: "10px 14px" }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "#1d4ed8", marginBottom: 6 }}>
+            <div style={{ background: "var(--m3-primary-container)", border: "1px solid var(--m3-outline-variant)", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "var(--m3-on-primary-container)", marginBottom: 6 }}>
                 📅 {days}日間の旅行
               </div>
-              <div style={{ fontSize: 11, color: "#3b82f6", lineHeight: 1.8 }}>
+              <div style={{ fontSize: 11, color: "var(--m3-on-primary-container)", lineHeight: 1.8 }}>
                 {fmt(startDate)} 〜 {fmt(endDate)}<br />
-                <span style={{ color: "#64748b" }}>Day 1 〜 Day {days} が自動作成されます</span>
+                <span style={{ color: "var(--m3-on-surface-variant)" }}>Day 1 〜 Day {days} が自動作成されます</span>
               </div>
             </div>
           )}
@@ -110,7 +110,7 @@ export default function TripPeriodModal({ onClose, onConfirm }: Props) {
         <div style={{ display: "flex", gap: 8, padding: "0 18px 18px" }}>
           <button
             onClick={onClose}
-            style={{ flex: 1, padding: "10px", background: "#f1f5f9", border: "none", borderRadius: 9, color: "#64748b", fontSize: 13, cursor: "pointer" }}
+            style={{ flex: 1, padding: "10px", background: "var(--m3-surface-variant)", border: "none", borderRadius: 9, color: "var(--m3-on-surface-variant)", fontSize: 13, cursor: "pointer" }}
           >
             キャンセル
           </button>

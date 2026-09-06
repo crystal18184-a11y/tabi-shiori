@@ -65,7 +65,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
   return (
     <div className="flex flex-col h-full">
       {/* 検索フィルター */}
-      <div className="bg-white border-b border-gray-100 px-3 py-3 space-y-2">
+      <div className="bg-m3-surface border-b border-m3-outline-variant px-3 py-3 space-y-2">
         {/* キーワード検索 */}
         <div className="flex gap-2">
           <input
@@ -74,7 +74,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
             onChange={e => setSearchInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && handleSearch()}
             placeholder="スポット名・住所・コメントで検索..."
-            className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="flex-1 border border-m3-outline rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <button
             onClick={handleSearch}
@@ -89,7 +89,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
           <select
             value={prefecture}
             onChange={e => setPrefecture(e.target.value)}
-            className="flex-1 border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+            className="flex-1 border border-m3-outline rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400 bg-m3-surface"
           >
             <option value="">都道府県（すべて）</option>
             {PREFECTURES.filter(p => p).map(p => <option key={p} value={p}>{p}</option>)}
@@ -97,7 +97,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
           <select
             value={category}
             onChange={e => setCategory(e.target.value)}
-            className="flex-1 border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+            className="flex-1 border border-m3-outline rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400 bg-m3-surface"
           >
             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
@@ -107,17 +107,17 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
       {/* スポット一覧 */}
       <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
         {isLoading && (
-          <div className="text-center py-8 text-gray-400 text-sm">読み込み中...</div>
+          <div className="text-center py-8 text-m3-on-surface-variant text-sm">読み込み中...</div>
         )}
         {!isLoading && spots.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
+          <div className="text-center py-12 text-m3-on-surface-variant">
             <div className="text-4xl mb-3">⭐</div>
             <p className="text-sm font-medium">まだおすすめスポットがありません</p>
             <p className="text-xs mt-1">下のボタンから最初の投稿をしてみましょう！</p>
           </div>
         )}
         {spots.map(spot => (
-          <div key={spot.id} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+          <div key={spot.id} className="bg-m3-surface rounded-xl border border-m3-outline-variant m3-elevation-1 overflow-hidden">
             {/* 写真 */}
             {spot.photoUrl && (
               <img
@@ -133,11 +133,11 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="text-sm">{CATEGORY_ICONS[spot.category] || "📍"}</span>
-                    <h3 className="font-bold text-sm text-gray-800 truncate">{spot.placeName}</h3>
-                    <span className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full shrink-0">{spot.category}</span>
+                    <h3 className="font-bold text-sm text-m3-on-surface truncate">{spot.placeName}</h3>
+                    <span className="text-xs bg-m3-primary-container text-m3-on-primary-container px-1.5 py-0.5 rounded-full shrink-0">{spot.category}</span>
                   </div>
                   {spot.prefecture && (
-                    <p className="text-xs text-gray-400 mt-0.5">📍 {spot.prefecture}</p>
+                    <p className="text-xs text-m3-on-surface-variant mt-0.5">📍 {spot.prefecture}</p>
                   )}
                 </div>
                 {/* 評価 */}
@@ -150,18 +150,18 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
 
               {/* 住所 */}
               {spot.address && (
-                <p className="text-xs text-gray-500 mt-1.5 truncate">{spot.address}</p>
+                <p className="text-xs text-m3-on-surface-variant mt-1.5 truncate">{spot.address}</p>
               )}
 
               {/* コメント */}
               {spot.comment && (
-                <p className="text-xs text-gray-600 mt-1.5 leading-relaxed line-clamp-2">{spot.comment}</p>
+                <p className="text-xs text-m3-on-surface-variant mt-1.5 leading-relaxed line-clamp-2">{spot.comment}</p>
               )}
 
               {/* フッター */}
               <div className="flex items-center justify-between mt-2.5">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs text-gray-400">by {spot.userName}</span>
+                  <span className="text-xs text-m3-on-surface-variant">by {spot.userName}</span>
                   {spot.sourceUrl && (
                     <a
                       href={spot.sourceUrl}
@@ -186,7 +186,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
       </div>
 
       {/* 投稿ボタン */}
-      <div className="px-3 py-3 border-t border-gray-100 bg-white">
+      <div className="px-3 py-3 border-t border-m3-outline-variant bg-m3-surface">
         <button
           onClick={() => setShowModal(true)}
           className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl text-sm font-bold hover:from-blue-600 hover:to-blue-700 transition shadow-sm"

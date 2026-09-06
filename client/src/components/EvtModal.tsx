@@ -51,14 +51,14 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
       className="fixed inset-0 bg-black/45 flex items-center justify-center z-[300] p-3"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white rounded-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col" onClick={e => e.stopPropagation()}>
+      <div className="bg-m3-surface rounded-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto m3-elevation-2 flex flex-col" onClick={e => e.stopPropagation()}>
         {/* ヘッダー */}
-        <div className="flex justify-between items-center px-4 py-3 border-b border-slate-100 flex-shrink-0">
-          <h2 id="evt-modal-title" className="font-bold text-sm text-slate-900">
+        <div className="flex justify-between items-center px-4 py-3 border-b border-m3-outline-variant flex-shrink-0">
+          <h2 id="evt-modal-title" className="font-bold text-sm text-m3-on-surface">
             {editEvtId ? "予定を編集" : "予定を追加"}
           </h2>
           <div className="flex gap-2">
-            <button onClick={onClose} className="bg-slate-100 border-none rounded-lg text-slate-500 px-3 py-1.5 text-xs cursor-pointer hover:bg-slate-200 transition-colors">キャンセル</button>
+            <button onClick={onClose} className="bg-m3-surface-variant border-none rounded-lg text-m3-on-surface-variant px-3 py-1.5 text-xs cursor-pointer hover:bg-m3-outline-variant transition-colors">キャンセル</button>
             <button onClick={handleSave} className="bg-gradient-to-r from-blue-500 to-indigo-500 border-none rounded-lg text-white px-4 py-1.5 text-xs font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all">保存する</button>
           </div>
         </div>
@@ -67,27 +67,27 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
         <div className="p-4 grid grid-cols-2 gap-3">
           {/* 日程選択 */}
           <div className="col-span-2 flex flex-col gap-1">
-            <label htmlFor="evt-day" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">日程</label>
-            <select id="evt-day" value={toDid} onChange={e => setToDid(e.target.value)} className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none cursor-pointer focus:border-blue-300 transition-colors">
+            <label htmlFor="evt-day" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">日程</label>
+            <select id="evt-day" value={toDid} onChange={e => setToDid(e.target.value)} className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none cursor-pointer focus:border-m3-primary transition-colors">
               {trip?.days.map((d, i) => <option key={d.id} value={d.id}>Day {i + 1}{d.date ? ` (${dsub(d.date)})` : ""}</option>)}
             </select>
           </div>
 
           {/* 時間・カテゴリ */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="evt-time" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">時間</label>
-            <input id="evt-time" type="time" value={form.time} onChange={e => form.setTime(e.target.value)} className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors" />
+            <label htmlFor="evt-time" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">時間</label>
+            <input id="evt-time" type="time" value={form.time} onChange={e => form.setTime(e.target.value)} className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none focus:border-m3-primary transition-colors" />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="evt-category" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">カテゴリ</label>
-            <select id="evt-category" value={form.category} onChange={e => form.setCategory(e.target.value)} className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none cursor-pointer focus:border-blue-300 transition-colors">
+            <label htmlFor="evt-category" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">カテゴリ</label>
+            <select id="evt-category" value={form.category} onChange={e => form.setCategory(e.target.value)} className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none cursor-pointer focus:border-m3-primary transition-colors">
               {Object.entries(CATS).map(([k, v]) => <option key={k} value={k}>{v.i} {k}</option>)}
             </select>
           </div>
 
           {/* タイトル（AI候補付き） */}
           <div className="col-span-2 flex flex-col gap-1 relative">
-            <label htmlFor="evt-title" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+            <label htmlFor="evt-title" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">
               場所名 *
               {form.aiSearching && <span className="font-normal text-blue-500 ml-1.5">🔍 検索中...</span>}
             </label>
@@ -98,32 +98,32 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
               onFocus={() => form.placeCandidates.length > 0 && form.setShowCandidates(true)}
               placeholder="例：あぢもり（入力すると場所候補が表示されます）"
               autoComplete="off"
-              className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors"
+              className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none focus:border-m3-primary transition-colors"
             />
             {/* AI候補ドロップダウン */}
             {form.showCandidates && form.placeCandidates.length > 0 && (
-              <div className="absolute top-full left-0 right-0 z-[400] bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden mt-0.5">
-                <div className="px-2.5 py-1.5 text-[10px] font-bold text-slate-500 border-b border-slate-100">📍 場所候補（クリックで選択）</div>
+              <div className="absolute top-full left-0 right-0 z-[400] bg-m3-surface border border-m3-outline-variant rounded-xl m3-elevation-2 overflow-hidden mt-0.5">
+                <div className="px-2.5 py-1.5 text-[10px] font-bold text-m3-on-surface-variant border-b border-m3-outline-variant">📍 場所候補（クリックで選択）</div>
                 {form.placeCandidates.map((p, i) => (
                   <button
                     key={i}
                     onClick={() => form.applyCandidate(p)}
-                    className="w-full text-left px-3 py-2 border-b border-slate-50 last:border-0 cursor-pointer hover:bg-slate-50 flex flex-col gap-0.5 transition-colors bg-transparent"
+                    className="w-full text-left px-3 py-2 border-b border-m3-outline-variant last:border-0 cursor-pointer hover:bg-m3-surface-variant flex flex-col gap-0.5 transition-colors bg-transparent"
                   >
-                    <span className="text-sm font-bold text-slate-900">{p.name}</span>
-                    <span className="text-[10px] text-slate-500">📍 {p.address}</span>
+                    <span className="text-sm font-bold text-m3-on-surface">{p.name}</span>
+                    <span className="text-[10px] text-m3-on-surface-variant">📍 {p.address}</span>
                     <span className="text-[10px] text-blue-500">{p.category}</span>
                   </button>
                 ))}
-                <button onClick={() => form.setShowCandidates(false)} className="w-full px-3 py-1.5 text-[10px] text-slate-400 cursor-pointer text-center bg-transparent border-none hover:bg-slate-50 transition-colors">閉じる</button>
+                <button onClick={() => form.setShowCandidates(false)} className="w-full px-3 py-1.5 text-[10px] text-m3-on-surface-variant cursor-pointer text-center bg-transparent border-none hover:bg-m3-surface-variant transition-colors">閉じる</button>
               </div>
             )}
           </div>
 
           {/* Google Maps URL */}
           <div className="col-span-2 flex flex-col gap-1">
-            <label htmlFor="evt-url" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              Google Maps URL <span className="font-normal text-slate-400">（短縮URL maps.app.goo.gl も対応）</span>
+            <label htmlFor="evt-url" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">
+              Google Maps URL <span className="font-normal text-m3-on-surface-variant">（短縮URL maps.app.goo.gl も対応）</span>
             </label>
             <div className="flex gap-1.5">
               <input
@@ -131,7 +131,7 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
                 value={form.url}
                 onChange={e => { form.setUrl(e.target.value); form.handleUrlGeocode(e.target.value); }}
                 placeholder="https://maps.app.goo.gl/..."
-                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors"
+                className="flex-1 bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none focus:border-m3-primary transition-colors"
               />
               <button
                 onClick={() => form.handleUrlGeocode(form.url)}
@@ -140,13 +140,13 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
                 className="bg-blue-50 border border-blue-200 rounded-lg text-blue-600 px-2.5 py-2 text-xs cursor-pointer whitespace-nowrap flex-shrink-0 hover:bg-blue-100 transition-colors disabled:opacity-50"
               >{form.geoLoading ? "⏳" : "🔍"} URL解析</button>
             </div>
-            <p className="text-[10px] text-slate-400 mt-0.5 leading-relaxed">① GoogleマップでURLをコピー → ② 上に貼り付け → ③「🔍 URL解析」で自動取得</p>
+            <p className="text-[10px] text-m3-on-surface-variant mt-0.5 leading-relaxed">① GoogleマップでURLをコピー → ② 上に貼り付け → ③「🔍 URL解析」で自動取得</p>
           </div>
 
           {/* 場所・住所 */}
           <div className="col-span-2 flex flex-col gap-1">
-            <label htmlFor="evt-location" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              住所 <span className="font-normal text-slate-400">（URL解析後に自動入力されます）</span>
+            <label htmlFor="evt-location" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">
+              住所 <span className="font-normal text-m3-on-surface-variant">（URL解析後に自動入力されます）</span>
             </label>
             <div className="flex gap-1.5">
               <input
@@ -154,13 +154,13 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
                 value={form.location}
                 onChange={e => form.setLocation(e.target.value)}
                 placeholder="例：鹿児島県鹿児島市千日町１３－２１（自動入力されます）"
-                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors"
+                className="flex-1 bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none focus:border-m3-primary transition-colors"
               />
               <button
                 onClick={form.handleGeocode}
                 disabled={form.geoLoading}
                 aria-label="住所から座標を取得"
-                className="bg-slate-100 border border-slate-200 rounded-lg text-slate-500 px-2.5 py-2 text-xs cursor-pointer whitespace-nowrap flex-shrink-0 hover:bg-slate-200 transition-colors disabled:opacity-50"
+                className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-m3-on-surface-variant px-2.5 py-2 text-xs cursor-pointer whitespace-nowrap flex-shrink-0 hover:bg-m3-outline-variant transition-colors disabled:opacity-50"
               >{form.geoLoading ? "⏳" : "📍"} 座標取得</button>
             </div>
           </div>
@@ -194,41 +194,41 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
 
           {/* 緯度・経度 */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="evt-lat" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">緯度（自動入力）</label>
-            <input id="evt-lat" value={form.lat} onChange={e => form.setLat(e.target.value)} placeholder="35.71" className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors" />
+            <label htmlFor="evt-lat" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">緯度（自動入力）</label>
+            <input id="evt-lat" value={form.lat} onChange={e => form.setLat(e.target.value)} placeholder="35.71" className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none focus:border-m3-primary transition-colors" />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="evt-lng" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">経度（自動入力）</label>
-            <input id="evt-lng" value={form.lng} onChange={e => form.setLng(e.target.value)} placeholder="139.79" className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors" />
+            <label htmlFor="evt-lng" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">経度（自動入力）</label>
+            <input id="evt-lng" value={form.lng} onChange={e => form.setLng(e.target.value)} placeholder="139.79" className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none focus:border-m3-primary transition-colors" />
           </div>
 
           {/* 予約番号 */}
           <div className="col-span-2 flex flex-col gap-1">
-            <label htmlFor="evt-resno" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">予約番号</label>
-            <input id="evt-resno" value={form.reservationNo} onChange={e => form.setReservationNo(e.target.value)} placeholder="例：ABC-12345678" className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none font-mono focus:border-blue-300 transition-colors" />
+            <label htmlFor="evt-resno" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">予約番号</label>
+            <input id="evt-resno" value={form.reservationNo} onChange={e => form.setReservationNo(e.target.value)} placeholder="例：ABC-12345678" className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none font-mono focus:border-m3-primary transition-colors" />
           </div>
 
           {/* メモ */}
           <div className="col-span-2 flex flex-col gap-1">
-            <label htmlFor="evt-memo" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">メモ</label>
-            <textarea id="evt-memo" value={form.memo} onChange={e => form.setMemo(e.target.value)} placeholder="メモ..." className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none h-16 resize-y focus:border-blue-300 transition-colors" />
+            <label htmlFor="evt-memo" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">メモ</label>
+            <textarea id="evt-memo" value={form.memo} onChange={e => form.setMemo(e.target.value)} placeholder="メモ..." className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none h-16 resize-y focus:border-m3-primary transition-colors" />
           </div>
 
           {/* 写真 */}
           <div className="col-span-2 flex flex-col gap-1">
-            <label htmlFor="evt-photo-url" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">写真URL</label>
+            <label htmlFor="evt-photo-url" className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">写真URL</label>
             <div className="flex gap-1.5">
               <input
                 id="evt-photo-url"
                 value={form.photo}
                 onChange={e => form.setUrl(e.target.value)}
                 placeholder="画像URL"
-                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors"
+                className="flex-1 bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-sm px-2.5 py-2 outline-none focus:border-m3-primary transition-colors"
               />
               <button
                 onClick={() => document.getElementById("evt-photo-file")?.click()}
                 aria-label="ファイルから写真を選択"
-                className="bg-slate-100 border border-slate-200 rounded-lg text-slate-500 px-2.5 py-2 text-xs cursor-pointer flex-shrink-0 hover:bg-slate-200 transition-colors"
+                className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-m3-on-surface-variant px-2.5 py-2 text-xs cursor-pointer flex-shrink-0 hover:bg-m3-outline-variant transition-colors"
               >📁</button>
               <input type="file" id="evt-photo-file" accept="image/*" className="hidden" onChange={form.handlePhotoChange} />
             </div>

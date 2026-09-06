@@ -28,26 +28,26 @@ export default function MapSidebar({ trip, mapMode, currentDid, onFocusEvent, is
   return (
     <aside
       aria-label="スポット一覧"
-      className="w-48 bg-white border-l border-slate-200 flex flex-col overflow-hidden flex-shrink-0 shadow-lg"
+      className="w-48 bg-m3-surface border-l border-m3-outline-variant flex flex-col overflow-hidden flex-shrink-0 m3-elevation-2"
     >
-      <div className="px-2.5 py-2 border-b border-slate-100 bg-slate-50">
-        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+      <div className="px-2.5 py-2 border-b border-m3-outline-variant bg-m3-surface-variant">
+        <h2 className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">
           📍 スポット一覧
         </h2>
       </div>
       <nav aria-label="地図スポット" className="flex-1 overflow-y-auto">
         {visibleDayGroups.length === 0 && (
-          <div className="flex flex-col items-center gap-2 py-8 text-slate-400">
+          <div className="flex flex-col items-center gap-2 py-8 text-m3-on-surface-variant">
             <span className="text-3xl">🗺️</span>
             <p className="text-[11px] text-center">座標のある予定がありません</p>
           </div>
         )}
 
         {visibleDayGroups.map((group, idx) => (
-          <div key={group.day.id} className={idx > 0 ? "border-t border-slate-100" : ""}>
+          <div key={group.day.id} className={idx > 0 ? "border-t border-m3-outline-variant" : ""}>
             {/* Day ヘッダー */}
-            <div className="px-2.5 py-2 bg-slate-50 border-b border-slate-100 sticky top-0 z-10">
-              <div className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">
+            <div className="px-2.5 py-2 bg-m3-surface-variant border-b border-m3-outline-variant sticky top-0 z-10">
+              <div className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider">
                 {group.day.name || `Day ${idx + 1}`}
               </div>
             </div>
@@ -55,7 +55,7 @@ export default function MapSidebar({ trip, mapMode, currentDid, onFocusEvent, is
             {/* 予定 */}
             {group.events.length > 0 && (
               <div className="p-1.5">
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider px-1.5 py-1">
+                <div className="text-[9px] font-bold text-m3-on-surface-variant uppercase tracking-wider px-1.5 py-1">
                   予定
                 </div>
                 {group.events.map(e => (
@@ -63,10 +63,10 @@ export default function MapSidebar({ trip, mapMode, currentDid, onFocusEvent, is
                     key={e.id}
                     onClick={() => onFocusEvent(e.id)}
                     aria-label={`${e.title}の位置を地図に表示`}
-                    className="w-full text-left bg-transparent border-none rounded-lg px-2 py-1.5 cursor-pointer hover:bg-slate-50 transition-colors"
+                    className="w-full text-left bg-transparent border-none rounded-lg px-2 py-1.5 cursor-pointer hover:bg-m3-surface-variant transition-colors"
                   >
-                    <div className="text-xs font-semibold text-slate-800 truncate">{e.title}</div>
-                    {e.location && <div className="text-[10px] text-slate-400 truncate">📍 {e.location}</div>}
+                    <div className="text-xs font-semibold text-m3-on-surface truncate">{e.title}</div>
+                    {e.location && <div className="text-[10px] text-m3-on-surface-variant truncate">📍 {e.location}</div>}
                   </button>
                 ))}
               </div>
@@ -74,7 +74,7 @@ export default function MapSidebar({ trip, mapMode, currentDid, onFocusEvent, is
 
             {/* スポット */}
             {group.spots.length > 0 && (
-              <div className={group.events.length > 0 ? "p-1.5 border-t border-slate-100" : "p-1.5"}>
+              <div className={group.events.length > 0 ? "p-1.5 border-t border-m3-outline-variant" : "p-1.5"}>
                 <div className="text-[9px] font-bold text-amber-500 uppercase tracking-wider px-1.5 py-1">
                   ★ 行きたい
                 </div>
@@ -85,8 +85,8 @@ export default function MapSidebar({ trip, mapMode, currentDid, onFocusEvent, is
                     aria-label={`${p.name}の位置を地図に表示`}
                     className="w-full text-left bg-transparent border-none rounded-lg px-2 py-1.5 cursor-pointer hover:bg-amber-50 transition-colors"
                   >
-                    <div className="text-xs font-semibold text-slate-800 truncate">{p.name}</div>
-                    {p.location && <div className="text-[10px] text-slate-400 truncate">📍 {p.location}</div>}
+                    <div className="text-xs font-semibold text-m3-on-surface truncate">{p.name}</div>
+                    {p.location && <div className="text-[10px] text-m3-on-surface-variant truncate">📍 {p.location}</div>}
                   </button>
                 ))}
               </div>

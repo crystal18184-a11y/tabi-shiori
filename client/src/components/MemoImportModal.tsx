@@ -132,20 +132,20 @@ export default function MemoImportModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col">
+      <div className="bg-m3-surface rounded-t-2xl sm:rounded-2xl m3-elevation-2 w-full max-w-lg max-h-[90vh] flex flex-col">
         {/* ヘッダー */}
-        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100">
+        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-m3-outline-variant">
           <div>
-            <h2 className="text-base font-bold text-gray-800">
+            <h2 className="text-base font-bold text-m3-on-surface">
               📋 メモから予定を一括登録
             </h2>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-m3-on-surface-variant mt-0.5">
               複数日の旅程メモも自動的に各Dayに振り分けます
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+            className="text-m3-on-surface-variant hover:text-m3-on-surface text-xl leading-none"
           >
             ×
           </button>
@@ -156,14 +156,14 @@ export default function MemoImportModal({
           {step === "input" ? (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1.5">
                   旅程メモを貼り付けてください
                 </label>
                 <textarea
                   value={memo}
                   onChange={(e) => setMemo(e.target.value)}
                   placeholder={`例：\n【1日目】\n9:00 羽田空港 出発 NH123\n11:30 大阪伊丹空港 到着\n13:00 梅田でランチ\n\n【2日目】\n9:00 大阪城 観光\n12:00 道頓堀 昼食\n15:00 USJ 入場`}
-                  className="w-full h-48 text-sm border border-gray-200 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 font-mono"
+                  className="w-full h-48 text-sm border border-m3-outline-variant bg-m3-surface-variant rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 font-mono"
                   autoFocus
                 />
               </div>
@@ -179,14 +179,14 @@ export default function MemoImportModal({
                   {error}
                 </p>
               )}
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-m3-on-surface-variant">
                 💡 「1日目」「Day1」「3/15」などの日付表記があると精度が上がります
               </p>
             </div>
           ) : (
             <div className="space-y-3">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-m3-on-surface-variant">
                   <span className="font-semibold text-blue-600">{parsed.length}件</span>
                   の予定が見つかりました。登録する予定を選択してください。
                 </p>
@@ -213,7 +213,7 @@ export default function MemoImportModal({
                     className={`w-full text-left rounded-xl border-2 p-3 transition-all ${
                       isSelected
                         ? "border-blue-400 bg-blue-50"
-                        : "border-gray-200 bg-gray-50 opacity-60"
+                        : "border-m3-outline-variant bg-m3-surface-variant opacity-60"
                     }`}
                   >
                     <div className="flex items-start gap-2">
@@ -221,7 +221,7 @@ export default function MemoImportModal({
                         className={`w-5 h-5 rounded-full border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${
                           isSelected
                             ? "border-blue-500 bg-blue-500"
-                            : "border-gray-300"
+                            : "border-m3-outline"
                         }`}
                       >
                         {isSelected && (
@@ -237,7 +237,7 @@ export default function MemoImportModal({
                             {getDayLabel(evt.dayIndex)}
                           </span>
                           {evt.time && (
-                            <span className="text-xs font-mono text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+                            <span className="text-xs font-mono text-m3-on-surface-variant bg-m3-surface-variant px-1.5 py-0.5 rounded">
                               {evt.time}
                             </span>
                           )}
@@ -248,16 +248,16 @@ export default function MemoImportModal({
                             {cat.i} {evt.category}
                           </span>
                         </div>
-                        <p className="text-sm font-semibold text-gray-800 mt-1 truncate">
+                        <p className="text-sm font-semibold text-m3-on-surface mt-1 truncate">
                           {evt.title}
                         </p>
                         {evt.location && (
-                          <p className="text-xs text-gray-500 truncate">
+                          <p className="text-xs text-m3-on-surface-variant truncate">
                             📍 {evt.location}
                           </p>
                         )}
                         {evt.memo && (
-                          <p className="text-xs text-gray-400 truncate mt-0.5">
+                          <p className="text-xs text-m3-on-surface-variant truncate mt-0.5">
                             {evt.memo}
                           </p>
                         )}
@@ -276,12 +276,12 @@ export default function MemoImportModal({
         </div>
 
         {/* フッター */}
-        <div className="px-5 py-4 border-t border-gray-100 flex gap-3">
+        <div className="px-5 py-4 border-t border-m3-outline-variant flex gap-3">
           {step === "input" ? (
             <>
               <button
                 onClick={onClose}
-                className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50"
+                className="flex-1 py-2.5 rounded-xl border border-m3-outline-variant text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant"
               >
                 キャンセル
               </button>
@@ -307,7 +307,7 @@ export default function MemoImportModal({
                   setStep("input");
                   setError(null);
                 }}
-                className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50"
+                className="flex-1 py-2.5 rounded-xl border border-m3-outline-variant text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant"
               >
                 ← 戻る
               </button>

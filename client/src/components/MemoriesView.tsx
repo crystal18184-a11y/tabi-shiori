@@ -90,20 +90,20 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
       {/* ヘッダー: 旅行完了トグル */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
         <div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#0f172a" }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: "var(--m3-on-surface)" }}>
             {isCompleted ? "🎉 旅の思い出" : "📸 思い出を記録"}
           </div>
-          <div style={{ fontSize: 11, color: "#64748b", marginTop: 2 }}>
+          <div style={{ fontSize: 11, color: "var(--m3-on-surface-variant)", marginTop: 2 }}>
             {isCompleted ? "旅行完了 • 写真とコメントを残しましょう" : "旅行中・旅行後に思い出を記録できます"}
           </div>
         </div>
         <button
           onClick={onToggleCompleted}
           style={{
-            background: isCompleted ? "#dcfce7" : "#f1f5f9",
-            border: `1px solid ${isCompleted ? "#bbf7d0" : "#e2e8f0"}`,
+            background: isCompleted ? "#dcfce7" : "var(--m3-surface-variant)",
+            border: `1px solid ${isCompleted ? "#bbf7d0" : "var(--m3-outline-variant)"}`,
             borderRadius: 20,
-            color: isCompleted ? "#166534" : "#64748b",
+            color: isCompleted ? "#166534" : "var(--m3-on-surface-variant)",
             padding: "5px 12px",
             fontSize: 11,
             fontWeight: 700,
@@ -121,10 +121,10 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
           <button
             onClick={() => setFilterDayId("all")}
             style={{
-              background: filterDayId === "all" ? "#1e293b" : "#f1f5f9",
+              background: filterDayId === "all" ? "var(--m3-primary-container)" : "var(--m3-surface-variant)",
               border: "none",
               borderRadius: 20,
-              color: filterDayId === "all" ? "#fff" : "#64748b",
+              color: filterDayId === "all" ? "var(--m3-on-primary-container)" : "var(--m3-on-surface-variant)",
               padding: "4px 12px",
               fontSize: 11,
               fontWeight: 600,
@@ -137,10 +137,10 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
               key={d.id}
               onClick={() => setFilterDayId(d.id)}
               style={{
-                background: filterDayId === d.id ? "#1e293b" : "#f1f5f9",
+                background: filterDayId === d.id ? "var(--m3-primary-container)" : "var(--m3-surface-variant)",
                 border: "none",
                 borderRadius: 20,
-                color: filterDayId === d.id ? "#fff" : "#64748b",
+                color: filterDayId === d.id ? "var(--m3-on-primary-container)" : "var(--m3-on-surface-variant)",
                 padding: "4px 12px",
                 fontSize: 11,
                 fontWeight: 600,
@@ -154,7 +154,7 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
 
       {/* 思い出グリッド */}
       {filtered.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "40px 20px", color: "#94a3b8" }}>
+        <div style={{ textAlign: "center", padding: "40px 20px", color: "var(--m3-on-surface-variant)" }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>📷</div>
           <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>思い出がまだありません</div>
           <div style={{ fontSize: 12, lineHeight: 1.6 }}>
@@ -170,11 +170,11 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
               <div
                 key={mem.id}
                 style={{
-                  background: "#fff",
+                  background: "var(--m3-surface)",
                   borderRadius: 12,
                   overflow: "hidden",
-                  boxShadow: "0 2px 8px rgba(0,0,0,.08)",
-                  border: "1px solid #f1f5f9",
+                  boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.06), 0 1px 3px 1px rgb(0 0 0 / 0.08)",
+                  border: "1px solid var(--m3-outline-variant)",
                   position: "relative",
                 }}
               >
@@ -191,7 +191,7 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
                     />
                   </div>
                 ) : (
-                  <div style={{ width: "100%", aspectRatio: "4/3", background: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>
+                  <div style={{ width: "100%", aspectRatio: "4/3", background: "var(--m3-surface-variant)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>
                     💬
                   </div>
                 )}
@@ -206,18 +206,18 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
                   )}
                   {/* コメント */}
                   {mem.comment && (
-                    <div style={{ fontSize: 12, color: "#1e293b", lineHeight: 1.5, marginBottom: 4 }}>
+                    <div style={{ fontSize: 12, color: "var(--m3-on-surface)", lineHeight: 1.5, marginBottom: 4 }}>
                       {mem.comment}
                     </div>
                   )}
                   {/* 場所 */}
                   {mem.location && (
-                    <div style={{ fontSize: 10, color: "#64748b", marginBottom: 4 }}>
+                    <div style={{ fontSize: 10, color: "var(--m3-on-surface-variant)", marginBottom: 4 }}>
                       📍 {mem.location}
                     </div>
                   )}
                   {/* 日時 */}
-                  <div style={{ fontSize: 10, color: "#94a3b8" }}>
+                  <div style={{ fontSize: 10, color: "var(--m3-on-surface-variant)" }}>
                     {formatDate(mem.createdAt)}
                   </div>
                 </div>
@@ -276,17 +276,17 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", display: "flex", alignItems: "flex-end", justifyContent: "center", zIndex: 400, padding: "0 0 0 0" }}
           onClick={e => e.target === e.currentTarget && setAddModalOpen(false)}
         >
-          <div style={{ background: "#fff", borderRadius: "20px 20px 0 0", width: "100%", maxWidth: 500, maxHeight: "90vh", overflowY: "auto", padding: "20px 18px 30px" }}>
+          <div style={{ background: "var(--m3-surface)", borderRadius: "20px 20px 0 0", width: "100%", maxWidth: 500, maxHeight: "90vh", overflowY: "auto", padding: "20px 18px 30px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <span style={{ fontWeight: 800, fontSize: 15, color: "#0f172a" }}>📸 思い出を追加</span>
-              <button onClick={() => setAddModalOpen(false)} style={{ background: "none", border: "none", fontSize: 20, color: "#94a3b8", cursor: "pointer" }}>×</button>
+              <span style={{ fontWeight: 800, fontSize: 15, color: "var(--m3-on-surface)" }}>📸 思い出を追加</span>
+              <button onClick={() => setAddModalOpen(false)} style={{ background: "none", border: "none", fontSize: 20, color: "var(--m3-on-surface-variant)", cursor: "pointer" }}>×</button>
             </div>
 
             {/* 写真選択 */}
             <div style={{ marginBottom: 14 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>写真（任意）</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--m3-on-surface-variant)", marginBottom: 6 }}>写真（任意）</div>
               {compressing ? (
-                <div style={{ border: "2px dashed #e2e8f0", borderRadius: 10, padding: "24px", textAlign: "center", color: "#94a3b8" }}>
+                <div style={{ border: "2px dashed var(--m3-outline-variant)", borderRadius: 10, padding: "24px", textAlign: "center", color: "var(--m3-on-surface-variant)" }}>
                   <div style={{ fontSize: 12 }}>画像を圧縮中...</div>
                 </div>
               ) : photoPreview ? (
@@ -300,7 +300,7 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
               ) : (
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  style={{ border: "2px dashed #e2e8f0", borderRadius: 10, padding: "24px", textAlign: "center", cursor: "pointer", color: "#94a3b8" }}
+                  style={{ border: "2px dashed var(--m3-outline-variant)", borderRadius: 10, padding: "24px", textAlign: "center", cursor: "pointer", color: "var(--m3-on-surface-variant)" }}
                 >
                   <div style={{ fontSize: 28, marginBottom: 6 }}>📷</div>
                   <div style={{ fontSize: 12 }}>タップして写真を選択</div>
@@ -318,35 +318,35 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
 
             {/* コメント */}
             <div style={{ marginBottom: 12 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>コメント</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--m3-on-surface-variant)", marginBottom: 6 }}>コメント</div>
               <textarea
                 value={comment}
                 onChange={e => setComment(e.target.value)}
                 placeholder="この瞬間の気持ちや感想を書いてください..."
                 rows={3}
-                style={{ width: "100%", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, color: "#1e293b", fontSize: 13, padding: "9px 12px", outline: "none", resize: "vertical", boxSizing: "border-box" }}
+                style={{ width: "100%", background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 8, color: "var(--m3-on-surface)", fontSize: 13, padding: "9px 12px", outline: "none", resize: "vertical", boxSizing: "border-box" }}
               />
             </div>
 
             {/* 場所 */}
             <div style={{ marginBottom: 12 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>場所（任意）</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--m3-on-surface-variant)", marginBottom: 6 }}>場所（任意）</div>
               <input
                 value={location}
                 onChange={e => setLocation(e.target.value)}
                 placeholder="例: 嵐山 竹林の道"
-                style={{ width: "100%", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, color: "#1e293b", fontSize: 13, padding: "9px 12px", outline: "none", boxSizing: "border-box" }}
+                style={{ width: "100%", background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 8, color: "var(--m3-on-surface)", fontSize: 13, padding: "9px 12px", outline: "none", boxSizing: "border-box" }}
               />
             </div>
 
             {/* 日程選択 */}
             {trip.days.length > 0 && (
               <div style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>日程（任意）</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--m3-on-surface-variant)", marginBottom: 6 }}>日程（任意）</div>
                 <select
                   value={selectedDayId}
                   onChange={e => setSelectedDayId(e.target.value)}
-                  style={{ width: "100%", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, color: "#1e293b", fontSize: 13, padding: "9px 12px", outline: "none", boxSizing: "border-box" }}
+                  style={{ width: "100%", background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 8, color: "var(--m3-on-surface)", fontSize: 13, padding: "9px 12px", outline: "none", boxSizing: "border-box" }}
                 >
                   <option value="">日程を選択しない</option>
                   {trip.days.map((d, i) => (
@@ -362,10 +362,10 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
               disabled={!photoPreview && !comment.trim()}
               style={{
                 width: "100%",
-                background: (photoPreview || comment.trim()) ? "linear-gradient(135deg,#f97316,#ec4899)" : "#f1f5f9",
+                background: (photoPreview || comment.trim()) ? "linear-gradient(135deg,#f97316,#ec4899)" : "var(--m3-surface-variant)",
                 border: "none",
                 borderRadius: 10,
-                color: (photoPreview || comment.trim()) ? "#fff" : "#94a3b8",
+                color: (photoPreview || comment.trim()) ? "#fff" : "var(--m3-on-surface-variant)",
                 padding: "12px",
                 fontSize: 14,
                 fontWeight: 700,

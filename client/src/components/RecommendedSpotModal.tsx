@@ -146,26 +146,26 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
   return (
     <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center bg-black/50" onClick={onClose}>
       <div
-        className="bg-white w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-m3-surface w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto m3-elevation-2"
         onClick={e => e.stopPropagation()}
       >
         {/* ヘッダー */}
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between rounded-t-2xl">
-          <h2 className="font-bold text-base text-gray-800">⭐ おすすめスポットを投稿</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+        <div className="sticky top-0 bg-m3-surface border-b border-m3-outline-variant px-4 py-3 flex items-center justify-between rounded-t-2xl">
+          <h2 className="font-bold text-base text-m3-on-surface">⭐ おすすめスポットを投稿</h2>
+          <button onClick={onClose} className="text-m3-on-surface-variant hover:text-m3-on-surface text-xl leading-none">✕</button>
         </div>
 
         <div className="px-4 py-4 space-y-4">
           {/* SNS URL */}
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">SNS URL（任意）</label>
+            <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1">SNS URL（任意）</label>
             <div className="flex gap-2">
               <input
                 type="url"
                 value={sourceUrl}
                 onChange={e => setSourceUrl(e.target.value)}
                 placeholder="https://tabelog.com/... など"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="flex-1 border border-m3-outline rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
               <button
                 onClick={handleParseUrl}
@@ -179,34 +179,34 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
 
           {/* 店名・スポット名 */}
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">店名・スポット名 <span className="text-red-500">*</span></label>
+            <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1">店名・スポット名 <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={placeName}
               onChange={e => setPlaceName(e.target.value)}
               placeholder="例：あぢもり、桜島展望台"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-m3-outline rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           {/* カテゴリ・都道府県 */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">カテゴリ</label>
+              <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1">カテゴリ</label>
               <select
                 value={category}
                 onChange={e => setCategory(e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                className="w-full border border-m3-outline rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-m3-surface"
               >
                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">都道府県</label>
+              <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1">都道府県</label>
               <select
                 value={prefecture}
                 onChange={e => setPrefecture(e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                className="w-full border border-m3-outline rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-m3-surface"
               >
                 <option value="">選択してください</option>
                 {PREFECTURES.map(p => <option key={p} value={p}>{p}</option>)}
@@ -216,14 +216,14 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
 
           {/* 住所 */}
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">住所</label>
+            <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1">住所</label>
             <div className="flex gap-2">
               <input
                 type="text"
                 value={address}
                 onChange={e => setAddress(e.target.value)}
                 placeholder="例：鹿児島県鹿児島市千日町..."
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="flex-1 border border-m3-outline rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
               <button
                 onClick={handleGeocode}
@@ -240,42 +240,42 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
 
           {/* 評価 */}
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">評価</label>
+            <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1">評価</label>
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map(n => (
                 <button
                   key={n}
                   onClick={() => setRating(n)}
-                  className={`text-2xl transition ${n <= rating ? "text-yellow-400" : "text-gray-300"}`}
+                  className={`text-2xl transition ${n <= rating ? "text-yellow-400" : "text-m3-outline"}`}
                 >
                   ★
                 </button>
               ))}
-              <span className="text-sm text-gray-500 ml-1 self-center">{rating}/5</span>
+              <span className="text-sm text-m3-on-surface-variant ml-1 self-center">{rating}/5</span>
             </div>
           </div>
 
           {/* おすすめコメント */}
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">おすすめコメント</label>
+            <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1">おすすめコメント</label>
             <textarea
               value={comment}
               onChange={e => setComment(e.target.value)}
               placeholder="おすすめポイントや注意事項など..."
               rows={3}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+              className="w-full border border-m3-outline rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
             />
           </div>
 
           {/* 写真URL */}
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">写真URL（任意）</label>
+            <label className="block text-xs font-semibold text-m3-on-surface-variant mb-1">写真URL（任意）</label>
             <input
               type="url"
               value={photoUrl}
               onChange={e => setPhotoUrl(e.target.value)}
               placeholder="https://..."
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-m3-outline rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
@@ -283,7 +283,7 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
           <div className="flex gap-2 pt-2">
             <button
               onClick={onClose}
-              className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-50 transition"
+              className="flex-1 py-2.5 border border-m3-outline rounded-xl text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant transition"
             >
               キャンセル
             </button>

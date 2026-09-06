@@ -214,23 +214,23 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-[300] p-3"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white rounded-2xl w-full max-w-sm max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col" onClick={e => e.stopPropagation()}>
+      <div className="bg-m3-surface rounded-2xl w-full max-w-sm max-h-[92vh] overflow-y-auto m3-elevation-2 flex flex-col" onClick={e => e.stopPropagation()}>
         {/* ヘッダー */}
-        <div className="flex justify-between items-center px-4 py-3 border-b border-slate-100 flex-shrink-0">
-          <h2 className="font-bold text-sm text-slate-900">📸 SNS用画像を作成</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg font-bold bg-transparent border-none cursor-pointer">×</button>
+        <div className="flex justify-between items-center px-4 py-3 border-b border-m3-outline-variant flex-shrink-0">
+          <h2 className="font-bold text-sm text-m3-on-surface">📸 SNS用画像を作成</h2>
+          <button onClick={onClose} className="text-m3-on-surface-variant hover:text-m3-on-surface text-lg font-bold bg-transparent border-none cursor-pointer">×</button>
         </div>
 
         <div className="p-4 flex flex-col gap-4">
           {/* フォーマット選択 */}
           <div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">サイズ</p>
+            <p className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">サイズ</p>
             <div className="flex gap-2">
               {(Object.entries(FORMAT_CONFIG) as [Format, typeof FORMAT_CONFIG[Format]][]).map(([key, cfg]) => (
                 <button
                   key={key}
                   onClick={() => setFormat(key)}
-                  className={`flex-1 py-2 px-3 rounded-lg border text-xs font-semibold transition-colors cursor-pointer ${format === key ? "bg-blue-500 text-white border-blue-500" : "bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300"}`}
+                  className={`flex-1 py-2 px-3 rounded-lg border text-xs font-semibold transition-colors cursor-pointer ${format === key ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface-variant text-m3-on-surface-variant border-m3-outline-variant hover:border-m3-outline"}`}
                 >
                   <div>{cfg.label}</div>
                   <div className="text-[10px] opacity-70 mt-0.5">{cfg.desc}</div>
@@ -241,7 +241,7 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
 
           {/* テーマカラー */}
           <div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">カラーテーマ</p>
+            <p className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">カラーテーマ</p>
             <div className="flex gap-2 flex-wrap">
               {THEMES.map((t, i) => (
                 <button
@@ -249,7 +249,7 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
                   onClick={() => setThemeIdx(i)}
                   title={t.label}
                   style={{ background: `linear-gradient(135deg, ${t.from}, ${t.to})` }}
-                  className={`w-8 h-8 rounded-full cursor-pointer transition-all hover:scale-110 ${themeIdx === i ? "ring-2 ring-offset-2 ring-slate-400" : ""}`}
+                  className={`w-8 h-8 rounded-full cursor-pointer transition-all hover:scale-110 ${themeIdx === i ? "ring-2 ring-offset-2 ring-m3-outline" : ""}`}
                 />
               ))}
             </div>
@@ -258,11 +258,11 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
           {/* canvas（常にDOMに存在させてrefを安定させる） */}
           <div>
             {generated && (
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">プレビュー</p>
+              <p className="text-[10px] font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">プレビュー</p>
             )}
             <canvas
               ref={canvasRef}
-              className={`w-full rounded-xl border border-slate-200 shadow-sm ${generated ? "block" : "hidden"}`}
+              className={`w-full rounded-xl border border-m3-outline-variant m3-elevation-1 ${generated ? "block" : "hidden"}`}
               style={{ aspectRatio: format === "square" ? "1/1" : "9/16" }}
             />
           </div>
@@ -286,7 +286,7 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
             )}
           </div>
 
-          <p className="text-[10px] text-slate-400 text-center leading-relaxed">
+          <p className="text-[10px] text-m3-on-surface-variant text-center leading-relaxed">
             生成した画像をインスタ・TikTok・Xに投稿できます。<br />
             画像にはアプリ名が入り、自然に宣伝になります✨
           </p>
