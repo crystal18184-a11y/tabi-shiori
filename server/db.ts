@@ -98,6 +98,7 @@ function genShareCode(): string {
 
 /** 共有プランを作成または更新する */
 export async function upsertSharedTrip(shareCode: string, tripData: string) {
+  validateTripDataSize(tripData, "upsertSharedTrip");
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const existing = await db.select().from(sharedTrips).where(eq(sharedTrips.shareCode, shareCode)).limit(1);
@@ -119,15 +120,15 @@ export async function getSharedTrip(shareCode: string) {
 }
 
 /** 新しい共有コードを生成して保存する */
-// ② DBスキーマ: JSONカラムのサイズ上限チェック（MySQL TEXT = 65535 bytes上限）
-const MAX_TRIP_DATA_BYTES = 60000; // 安全マージンを持たせて60KB
+// ② DBスキーマ: JSONカラムのサイズ上限チェック（MySQL MEDIUMTEXT = 16,777,215 bytes上限）
+const MAX_TRIP_DATA_BYTES = 8 * 1024 * 1024; // 安全マージンを持たせて8MB
 
 function validateTripDataSize(tripData: string, context: string): void {
   const bytes = Buffer.byteLength(tripData, "utf8");
   if (bytes > MAX_TRIP_DATA_BYTES) {
     throw new Error(
-      `[${context}] tripData size (${Math.round(bytes / 1024)}KB) exceeds limit (${Math.round(MAX_TRIP_DATA_BYTES / 1024)}KB). ` +
-      "Consider removing large base64 images or splitting trips."
+      `[${context}] tripData size (${Math.round(bytes / 1024)}KB) exceeds limit (${Math.round(MAX_TRIP_DATA_BYTES / 1024 / 1024)}MB). ` +
+      "写真の枚数を減らすか、旅行プランを分けてください。"
     );
   }
 }
@@ -150,6 +151,7 @@ export async function createSharedTrip(tripData: string): Promise<string> {
 
 /** ユーザーの旅行データを保存（upsert） */
 export async function saveUserTripData(clientId: string, tripData: string): Promise<void> {
+  validateTripDataSize(tripData, "saveUserTripData");
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.insert(userTripData)

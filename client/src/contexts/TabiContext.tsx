@@ -450,7 +450,10 @@ export function TabiProvider({ children }: { children: React.ReactNode }) {
     setState(dbState);
     saveState(dbState);
   }, []);
-  const { clientId } = useDataPersistence(state, handleDbLoaded);
+  const handleSaveError = useCallback((message: string) => {
+    toast(`⚠️ ${message}`, "#ef4444");
+  }, [toast]);
+  const { clientId } = useDataPersistence(state, handleDbLoaded, handleSaveError);
 
   return (
     <TabiContext.Provider value={{

@@ -68,8 +68,14 @@ export function useSharedTrip(
     try {
       await updateMutation.mutateAsync({ shareCode: code, tripData: JSON.stringify(trip) });
       lastUpdatedAt.current = new Date();
+      setSyncError(null);
     } catch (e) {
       console.warn("[Sync] Push failed:", e);
+      // 共有相手に変更が届いていないことに気づけるよう表示用エラーを残す
+      const message = e instanceof Error && /exceeds limit/.test(e.message)
+        ? "写真が多すぎて共有相手に同期できません。一部の写真を減らしてください"
+        : "共有相手への同期に失敗しました";
+      setSyncError(message);
     } finally {
       isSyncing.current = false;
     }

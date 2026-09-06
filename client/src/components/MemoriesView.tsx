@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import type { Memory, TabiDay, Trip } from "@/lib/store";
 import { uid } from "@/lib/store";
+import { readAndCompressImageFile } from "@/lib/imageCompress";
 
 interface MemoriesViewProps {
   trip: Trip;
@@ -39,19 +40,22 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
     return `Day ${idx + 1}`;
   };
 
-  // 写真選択
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  // 写真選択（保存前にリサイズ・再圧縮してDB容量を圧迫しないようにする）
+  const [compressing, setCompressing] = useState(false);
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
       alert("5MB以下の画像を選択してください");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setPhotoPreview(ev.target?.result as string);
-    };
-    reader.readAsDataURL(file);
+    setCompressing(true);
+    try {
+      const compressed = await readAndCompressImageFile(file);
+      setPhotoPreview(compressed);
+    } finally {
+      setCompressing(false);
+    }
   }
 
   // 思い出を追加
@@ -281,7 +285,11 @@ export default function MemoriesView({ trip, onAddMemory, onDeleteMemory, onTogg
             {/* 写真選択 */}
             <div style={{ marginBottom: 14 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>写真（任意）</div>
-              {photoPreview ? (
+              {compressing ? (
+                <div style={{ border: "2px dashed #e2e8f0", borderRadius: 10, padding: "24px", textAlign: "center", color: "#94a3b8" }}>
+                  <div style={{ fontSize: 12 }}>画像を圧縮中...</div>
+                </div>
+              ) : photoPreview ? (
                 <div style={{ position: "relative" }}>
                   <img src={photoPreview} alt="プレビュー" style={{ width: "100%", maxHeight: 200, objectFit: "cover", borderRadius: 10 }} />
                   <button

@@ -1,6 +1,7 @@
 // ④ EvtModalのフォーム状態・ジオコーディングロジックを分離したカスタムフック
 import { useState, useRef, useCallback } from "react";
 import { geocodeByName } from "@/lib/geocode";
+import { compressImageDataUrl } from "@/lib/imageCompress";
 import { trpc } from "@/lib/trpc";
 import type { TabiEvent, PoolSpot } from "@/lib/store";
 
@@ -127,13 +128,15 @@ export function useEvtForm({ existing, initialSpot, tripDestination, clientId }:
     }
   }, []);
 
-  // 画像アップロード
+  // 画像アップロード（アップロード先が使えない場合はbase64のままDBに入るため、
+  // 事前に圧縮してサイズを抑えておく）
   const handlePhotoChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = async (ev) => {
-      const b64 = ev.target?.result as string;
+      const raw = ev.target?.result as string;
+      const b64 = await compressImageDataUrl(raw);
       setPhotoPreview(b64);
       try {
         const res = await uploadPhoto.mutateAsync({ base64: b64, clientId, filename: file.name });
@@ -196,7 +199,8 @@ export function useEvtForm({ existing, initialSpot, tripDestination, clientId }:
     for (const file of files) {
       const reader = new FileReader();
       reader.onload = async (ev) => {
-        const b64 = ev.target?.result as string;
+        const raw = ev.target?.result as string;
+        const b64 = file.type.startsWith("image/") ? await compressImageDataUrl(raw) : raw;
         try {
           const res = await uploadPhoto.mutateAsync({ base64: b64, clientId, filename: file.name });
           setAttachments(prev => [...prev, res.url]);

@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mediumtext, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -30,8 +30,8 @@ export const sharedTrips = mysqlTable("shared_trips", {
   id: int("id").autoincrement().primaryKey(),
   /** 共有コード（8文字英数字）*/
   shareCode: varchar("shareCode", { length: 16 }).notNull().unique(),
-  /** 旅行データ（JSON文字列）*/
-  tripData: text("tripData").notNull(),
+  /** 旅行データ（JSON文字列）。写真base64を含むため MEDIUMTEXT(最大16MB) */
+  tripData: mediumtext("tripData").notNull(),
   /** 作成者のopenId（任意）*/
   ownerOpenId: varchar("ownerOpenId", { length: 64 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -46,8 +46,8 @@ export const userTripData = mysqlTable("user_trip_data", {
   id: int("id").autoincrement().primaryKey(),
   /** ユーザーを一意に識別するキー（openIdまたはブラウザ固有ID）*/
   clientId: varchar("clientId", { length: 128 }).notNull().unique(),
-  /** 旅行データ全体（JSON文字列）*/
-  tripData: text("tripData").notNull(),
+  /** 旅行データ全体（JSON文字列）。写真base64を含むため MEDIUMTEXT(最大16MB) */
+  tripData: mediumtext("tripData").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

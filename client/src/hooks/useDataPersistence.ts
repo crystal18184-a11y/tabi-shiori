@@ -29,7 +29,8 @@ const CLIENT_ID = getClientId();
 
 export function useDataPersistence(
   state: AppState,
-  onLoaded: (state: AppState) => void
+  onLoaded: (state: AppState) => void,
+  onSaveError?: (message: string) => void
 ) {
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasLoaded = useRef(false);
@@ -38,6 +39,8 @@ export function useDataPersistence(
   // onLoadedをrefで保持して依存配列から外す
   const onLoadedRef = useRef(onLoaded);
   onLoadedRef.current = onLoaded;
+  const onSaveErrorRef = useRef(onSaveError);
+  onSaveErrorRef.current = onSaveError;
 
   const utils = trpc.useUtils();
 
@@ -89,8 +92,13 @@ export function useDataPersistence(
       try {
         await saveMutationRef.current.mutateAsync({ clientId: CLIENT_ID, tripData: json });
         lastSaved.current = json;
-      } catch {
-        // 保存失敗は無視（localStorageのバックアップがある）
+      } catch (err) {
+        // localStorageへのバックアップは残るが、他端末には同期されない。
+        // サイズ超過など原因が分かる場合はユーザーに通知する。
+        const message = err instanceof Error && /exceeds limit/.test(err.message)
+          ? "写真が多すぎてクラウド保存できませんでした。一部の写真を減らしてください（この端末には保存されています）"
+          : "クラウドへの保存に失敗しました（この端末には保存されています）";
+        onSaveErrorRef.current?.(message);
       }
     }, SAVE_DEBOUNCE_MS);
   }, []); // 空依存配列: saveMutationRefを使うので安定

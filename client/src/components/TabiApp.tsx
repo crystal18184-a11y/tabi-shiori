@@ -134,6 +134,15 @@ export default function TabiApp() {
     return () => { if (pushTimer.current) clearTimeout(pushTimer.current); };
   }, [t, shareCode, pushUpdate]);
 
+  // 共有モーダルを開いていなくても、同期失敗に気づけるようトーストでも通知する
+  const lastSyncErrorToasted = useRef<string | null>(null);
+  useEffect(() => {
+    if (syncError && syncError !== lastSyncErrorToasted.current) {
+      toast(`⚠️ ${syncError}`, "#ef4444");
+    }
+    lastSyncErrorToasted.current = syncError;
+  }, [syncError, toast]);
+
   // 初回起動ウィザード
   useEffect(() => {
     const tr = trip();
