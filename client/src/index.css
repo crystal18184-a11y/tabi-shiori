@@ -40,6 +40,18 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Material Design 3 カラーロール（タイムライン画面から段階導入） */
+  --color-m3-primary: var(--m3-primary);
+  --color-m3-on-primary: var(--m3-on-primary);
+  --color-m3-primary-container: var(--m3-primary-container);
+  --color-m3-on-primary-container: var(--m3-on-primary-container);
+  --color-m3-surface: var(--m3-surface);
+  --color-m3-surface-variant: var(--m3-surface-variant);
+  --color-m3-on-surface: var(--m3-on-surface);
+  --color-m3-on-surface-variant: var(--m3-on-surface-variant);
+  --color-m3-outline: var(--m3-outline);
+  --color-m3-outline-variant: var(--m3-outline-variant);
 }
 
 :root {
@@ -76,6 +88,36 @@
   --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.623 0.214 259.815);
+
+  /* M3カラーロール：既存の青系ブランドカラーからマッピング */
+  --m3-primary: var(--color-blue-600);
+  --m3-on-primary: #ffffff;
+  --m3-primary-container: var(--color-blue-100);
+  --m3-on-primary-container: var(--color-blue-900);
+  --m3-surface: #ffffff;
+  --m3-surface-variant: var(--color-slate-100);
+  --m3-on-surface: var(--color-slate-900);
+  --m3-on-surface-variant: var(--color-slate-500);
+  --m3-outline: var(--color-slate-300);
+  --m3-outline-variant: var(--color-slate-200);
+}
+
+@layer components {
+  /* M3エレベーション（枠線ではなく薄い影で階層を表現） */
+  .m3-elevation-1 {
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.06), 0 1px 3px 1px rgb(0 0 0 / 0.08);
+  }
+  .m3-elevation-2 {
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.08), 0 2px 6px 2px rgb(0 0 0 / 0.1);
+  }
+  /* M3アイコンボタンの状態レイヤー（ホバーで円形にうっすら色が付く） */
+  .m3-icon-btn {
+    border-radius: 9999px;
+    transition: background-color 0.15s ease;
+  }
+  .m3-icon-btn:hover {
+    background-color: rgb(0 0 0 / 0.06);
+  }
 }
 
 .dark {
@@ -111,6 +153,17 @@
   --sidebar-accent-foreground:  oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.488 0.243 264.376);
+
+  --m3-primary: var(--color-blue-400);
+  --m3-on-primary: var(--color-blue-950);
+  --m3-primary-container: var(--color-blue-900);
+  --m3-on-primary-container: var(--color-blue-100);
+  --m3-surface: var(--color-slate-900);
+  --m3-surface-variant: var(--color-slate-800);
+  --m3-on-surface: var(--color-slate-100);
+  --m3-on-surface-variant: var(--color-slate-400);
+  --m3-outline: var(--color-slate-600);
+  --m3-outline-variant: var(--color-slate-700);
 }
 
 @layer base {

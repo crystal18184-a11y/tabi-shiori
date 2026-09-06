@@ -258,12 +258,12 @@ export default function TabiApp() {
       <div className="w-[96vw] h-[94vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
 
         {/* ⑥ アクセシビリティ: role・aria属性付きトップバー */}
-        <header role="banner" className="flex items-center gap-2 px-3 py-2 bg-white border-b border-slate-200 flex-shrink-0 flex-wrap">
+        <header role="banner" className="flex items-center gap-2 px-3 py-2 bg-m3-surface m3-elevation-1 flex-shrink-0 flex-wrap relative z-10">
           <button
             onClick={() => setSidebarOpen(true)}
             aria-label="メニューを開く"
             aria-expanded={sidebarOpen}
-            className="px-3 py-1.5 text-xs font-bold text-slate-500 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors"
+            className="w-8 h-8 flex items-center justify-center text-sm font-bold text-m3-on-surface-variant m3-icon-btn cursor-pointer"
           >☰</button>
           <input
             value={t?.name || ""}
@@ -317,7 +317,7 @@ export default function TabiApp() {
           />
 
           {/* 機能タブ行 */}
-          <nav role="tablist" aria-label="機能タブ" className="flex items-center gap-1 px-3 py-1.5 bg-white border-b border-slate-200 flex-shrink-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+          <nav role="tablist" aria-label="機能タブ" className="flex items-center gap-1 px-3 py-1.5 bg-m3-surface border-b border-m3-outline-variant flex-shrink-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
             <div className="flex gap-1 flex-nowrap items-center min-w-max">
               {(Object.keys(TAB_LABELS) as TabType[]).map(tabKey => (
                 <button
@@ -327,8 +327,8 @@ export default function TabiApp() {
                   onClick={() => setTab(tabKey)}
                   className={`px-3 py-1 text-[10px] font-semibold rounded-full border whitespace-nowrap flex-shrink-0 transition-colors ${
                     tab === tabKey
-                      ? "bg-slate-900 text-white border-slate-900"
-                      : "bg-transparent text-slate-400 border-slate-200 hover:border-slate-300 hover:text-slate-600"
+                      ? "bg-m3-primary-container text-m3-on-primary-container border-transparent"
+                      : "bg-transparent text-m3-on-surface-variant border-m3-outline hover:border-m3-primary hover:text-m3-primary"
                   }`}
                 >{TAB_LABELS[tabKey]}</button>
               ))}
@@ -714,16 +714,16 @@ function SortableDayTab({ day, index, isActive, onSelect, onDel, onEdit, destina
         tabIndex={0}
         onClick={() => !isDragging && onSelect(day.id)}
         onKeyDown={e => e.key === "Enter" && !isDragging && onSelect(day.id)}
-        style={{ borderTopColor: color, borderTopWidth: 3, background: isActive ? color + "18" : "#f8fafc", borderColor: isActive ? color : "#e2e8f0" }}
-        className="border border-b-0 rounded-t-lg text-slate-400 px-2.5 pt-1.5 pb-1 cursor-pointer text-[11px] min-w-[60px] flex flex-col items-center gap-px select-none transition-all"
+        style={{ borderTopColor: color, borderTopWidth: 3, background: isActive ? color + "18" : "var(--m3-surface-variant)", borderColor: isActive ? color : "var(--m3-outline-variant)" }}
+        className="border border-b-0 rounded-t-xl text-m3-on-surface-variant px-2.5 pt-1.5 pb-1 cursor-pointer text-[11px] min-w-[60px] flex flex-col items-center gap-px select-none transition-all"
       >
-        <div {...attributes} {...listeners} className="cursor-grab text-slate-300 text-[10px] leading-none mb-px touch-none" title="ドラッグして並び替え">⠇</div>
+        <div {...attributes} {...listeners} className="cursor-grab text-m3-on-surface-variant/60 text-[10px] leading-none mb-px touch-none" title="ドラッグして並び替え">⠇</div>
         <span style={{ color: isActive ? color : undefined }} className="font-extrabold text-xs">Day {index + 1}{day.name ? ` ・ ${day.name}` : ""}</span>
-        <span className={`text-[9px] ${day.date ? "text-slate-500" : "text-slate-300"}`}>{day.date ? dsub(day.date) : "未設定"}</span>
+        <span className={`text-[9px] ${day.date ? "text-m3-on-surface-variant" : "text-m3-outline"}`}>{day.date ? dsub(day.date) : "未設定"}</span>
         {day.date && <WeatherBadge date={day.date} destination={day.location || destination} compact />}
       </div>
-      <button onClick={e => { e.stopPropagation(); onEdit(day.id); }} aria-label="Dayを編集" className="absolute -top-1 right-3 bg-slate-200 border-none rounded-full w-3.5 h-3.5 text-slate-500 cursor-pointer text-[8px] flex items-center justify-center leading-none hover:bg-slate-300">✎</button>
-      <button onClick={e => { e.stopPropagation(); onDel(day.id); }} aria-label="Dayを削除" className="absolute -top-1 -right-1 bg-slate-200 border-none rounded-full w-3.5 h-3.5 text-slate-500 cursor-pointer text-[9px] flex items-center justify-center leading-none hover:bg-red-200">×</button>
+      <button onClick={e => { e.stopPropagation(); onEdit(day.id); }} aria-label="Dayを編集" className="absolute -top-1 right-3 w-3.5 h-3.5 bg-m3-surface border border-m3-outline-variant text-m3-on-surface-variant text-[8px] flex items-center justify-center leading-none m3-icon-btn">✎</button>
+      <button onClick={e => { e.stopPropagation(); onDel(day.id); }} aria-label="Dayを削除" className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-m3-surface border border-m3-outline-variant text-m3-on-surface-variant text-[9px] flex items-center justify-center leading-none m3-icon-btn hover:text-red-500">×</button>
     </div>
   );
 }
@@ -747,7 +747,7 @@ function DayTabBar({ days, activeDayId, onSelectDay, onDelDay, onAddDay, onEditD
   }, [days, onReorderDay]);
 
   return (
-    <div className="bg-white border-b border-slate-200 px-2.5 flex-shrink-0 overflow-x-auto" style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}>
+    <div className="bg-m3-surface border-b border-m3-outline-variant px-2.5 flex-shrink-0 overflow-x-auto" style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}>
       <div className="flex gap-0.5 items-end pt-1.5 min-w-max">
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={days.map(d => d.id)} strategy={horizontalListSortingStrategy}>
@@ -756,9 +756,9 @@ function DayTabBar({ days, activeDayId, onSelectDay, onDelDay, onAddDay, onEditD
             ))}
           </SortableContext>
         </DndContext>
-        <button onClick={onAddDay} aria-label="日程を追加" className="bg-transparent border border-dashed border-slate-300 rounded-t-lg text-slate-400 px-2.5 py-1.5 cursor-pointer text-xs self-end whitespace-nowrap flex-shrink-0 hover:border-blue-300 hover:text-blue-400 transition-colors">＋ 日追加</button>
+        <button onClick={onAddDay} aria-label="日程を追加" className="bg-transparent border border-dashed border-m3-outline rounded-t-xl text-m3-on-surface-variant px-2.5 py-1.5 cursor-pointer text-xs self-end whitespace-nowrap flex-shrink-0 hover:border-m3-primary hover:text-m3-primary transition-colors">＋ 日追加</button>
         {days.some(d => d.date) && (
-          <button onClick={onSortByDate} title="日付順に並び替え" className="bg-transparent border border-slate-200 rounded-t-lg text-slate-500 px-2 py-1.5 cursor-pointer text-[10px] self-end whitespace-nowrap flex-shrink-0 hover:bg-slate-50 transition-colors">🗓️ 日付順</button>
+          <button onClick={onSortByDate} title="日付順に並び替え" className="bg-transparent border border-m3-outline-variant rounded-t-xl text-m3-on-surface-variant px-2 py-1.5 cursor-pointer text-[10px] self-end whitespace-nowrap flex-shrink-0 hover:bg-m3-surface-variant transition-colors">🗓️ 日付順</button>
         )}
       </div>
     </div>
@@ -833,14 +833,14 @@ function SortableEventCard({ event, index, total, dayId, onEdit, onDel, onAddToR
     <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.5 : 1, zIndex: isDragging ? 999 : undefined }} className="flex gap-2">
       <div className="flex flex-col items-center w-11 flex-shrink-0">
         <div style={{ background: c.c }} className="w-2 h-2 rounded-full flex-shrink-0 mt-1" />
-        <span className="text-[10px] font-bold text-slate-500 mt-0.5 whitespace-nowrap">{event.time}</span>
-        {index < total - 1 && <div className="flex-1 w-0.5 bg-slate-200 min-h-4 rounded mx-auto my-0.5" />}
+        <span className="text-[10px] font-bold text-m3-on-surface-variant mt-0.5 whitespace-nowrap">{event.time}</span>
+        {index < total - 1 && <div className="flex-1 w-0.5 bg-m3-outline-variant min-h-4 rounded mx-auto my-0.5" />}
       </div>
-      <article className={`flex-1 bg-white rounded-xl px-3 py-2.5 mb-2 border border-slate-200 ${isDragging ? "shadow-xl" : "shadow-sm"}`}>
+      <article className={`flex-1 bg-m3-surface rounded-xl px-3 py-2.5 mb-2 border border-m3-outline-variant ${isDragging ? "m3-elevation-2" : "m3-elevation-1"}`}>
         <div className="flex justify-between items-center mb-1.5">
           <span style={{ background: c.c + "18", color: c.c, borderColor: c.c + "40" }} className="inline-flex gap-1 text-[10px] font-bold rounded-full px-2 py-0.5 border">{c.i} {event.category}</span>
           <div className="flex gap-0.5 items-center">
-            <div {...attributes} {...listeners} className={`${isDragging ? "cursor-grabbing" : "cursor-grab"} px-1 py-0.5 text-slate-300 text-sm touch-none leading-none`} title="ドラッグして並び替え">⠿</div>
+            <div {...attributes} {...listeners} className={`${isDragging ? "cursor-grabbing" : "cursor-grab"} px-1 py-0.5 text-m3-on-surface-variant text-sm touch-none leading-none`} title="ドラッグして並び替え">⠿</div>
             {onAddToRecommended && (
               <button
                 onClick={() => onAddToRecommended(event)}
@@ -850,13 +850,13 @@ function SortableEventCard({ event, index, total, dayId, onEdit, onDel, onAddToR
                 ⭐ おすすめ
               </button>
             )}
-            <button onClick={() => onEdit(event.id)} aria-label={`${event.title}を編集`} className="bg-transparent border-none cursor-pointer text-sm p-0.5 opacity-50 hover:opacity-100">✏️</button>
-            <button onClick={() => onDel(dayId, event.id)} aria-label={`${event.title}を削除`} className="bg-transparent border-none cursor-pointer text-sm p-0.5 opacity-50 hover:opacity-100">🗑️</button>
+            <button onClick={() => onEdit(event.id)} aria-label={`${event.title}を編集`} className="w-6 h-6 flex items-center justify-center bg-transparent border-none cursor-pointer text-sm m3-icon-btn">✏️</button>
+            <button onClick={() => onDel(dayId, event.id)} aria-label={`${event.title}を削除`} className="w-6 h-6 flex items-center justify-center bg-transparent border-none cursor-pointer text-sm m3-icon-btn">🗑️</button>
           </div>
         </div>
-        <h4 className="text-sm font-bold text-slate-900 mb-0.5">{event.title}</h4>
+        <h4 className="text-sm font-bold text-m3-on-surface mb-0.5">{event.title}</h4>
         {event.location && (
-          <div className="text-[11px] text-slate-400 mb-0.5 flex items-center gap-1 flex-wrap">
+          <div className="text-[11px] text-m3-on-surface-variant mb-0.5 flex items-center gap-1 flex-wrap">
             <span>📍 {event.location}</span>
             <a
               href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hasCoord(event) ? `${event.lat},${event.lng}` : event.location)}&travelmode=driving`}
@@ -928,7 +928,7 @@ function TimelineView({ events, dayId, onEdit, onDel, onReorder, onAddToRecommen
       <button
         onClick={onAddEvent}
         aria-label="予定を追加"
-        className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl py-2.5 text-sm font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all flex items-center justify-center gap-1.5"
+        className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl py-2.5 text-sm font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all flex items-center justify-center gap-1.5 m3-elevation-1"
       >
         ＋ 予定を追加
       </button>
