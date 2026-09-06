@@ -370,7 +370,9 @@ export const appRouter = router({
             name: item.name,
             address: item.formatted_address,
             category: guessCategory(item.types),
-            mapsUrl: `https://www.google.com/maps/place/?q=place_id:${item.place_id}`,
+            // 公式のUniversal Maps URL形式。place_id単体だと「一致する検索結果がありません」となることがあるため、
+            // テキストクエリ(query)とplace_idを併記して確実に目的の場所へ遷移できるようにする
+            mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${item.name} ${item.formatted_address}`)}&query_place_id=${item.place_id}`,
             lat: String(item.geometry.location.lat),
             lng: String(item.geometry.location.lng),
           }));
