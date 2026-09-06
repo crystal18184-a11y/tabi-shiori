@@ -40,6 +40,9 @@ export interface TabiDay {
   id: string;
   date: string;
   name?: string;
+  /** その日の場所（任意）。天気表示・AI場所検索の地域絞り込みに使う。
+   *  未設定の場合は旅行全体のdestinationにフォールバックする。 */
+  location?: string;
   hotel?: string;
   hotelUrl?: string;
   hotelReservationNo?: string;

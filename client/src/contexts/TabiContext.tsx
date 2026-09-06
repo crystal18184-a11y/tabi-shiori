@@ -39,6 +39,7 @@ interface TabiContextType {
   sortDaysByDate: () => void;
   updateDayName: (dayId: string, name: string) => void;
   changeDayDateById: (dayId: string, date: string) => void;
+  updateDayLocation: (dayId: string, location: string) => void;
   saveEvt: (data: Omit<TabiEvent, "id">, toDid: string, editId?: string) => void;
   delEvt: (dayId: string, eid: string) => void;
   reorderEvt: (dayId: string, fromIdx: number, toIdx: number) => void;
@@ -247,6 +248,17 @@ export function TabiProvider({ children }: { children: React.ReactNode }) {
       ...prev,
       trips: prev.trips.map(t => t.id !== prev.tid ? t : {
         ...t, days: t.days.map(d => d.id === dayId ? { ...d, date } : d)
+      })
+    }));
+  }, [snap, update]);
+
+  /** Dayごとの場所を設定する（天気・場所検索の地域絞り込みに使用。未設定なら旅行全体のdestinationを使う） */
+  const updateDayLocation = useCallback((dayId: string, location: string) => {
+    snap();
+    update(prev => ({
+      ...prev,
+      trips: prev.trips.map(t => t.id !== prev.tid ? t : {
+        ...t, days: t.days.map(d => d.id === dayId ? { ...d, location } : d)
       })
     }));
   }, [snap, update]);
@@ -460,7 +472,7 @@ export function TabiProvider({ children }: { children: React.ReactNode }) {
       state, trip, day, snap, doUndo, canUndo,
       updateTripField, addTrip, addTripWithPeriod, selTrip, delTrip,
       addDay, selDay, delDay, changeDayDate,
-      reorderDay, sortDaysByDate, updateDayName, changeDayDateById,
+      reorderDay, sortDaysByDate, updateDayName, changeDayDateById, updateDayLocation,
       saveEvt, delEvt, reorderEvt, moveEvtToDay, savePool, delPool,
       addMember, delMember, addExpense, delExpense, updateExpense,
       getDayColor, getDayIndex, toast, applyRemoteTrip, clientId,

@@ -51,7 +51,7 @@ export default function TabiApp() {
   const {
     state, trip, day, canUndo, doUndo, selTrip, delTrip, addTripWithPeriod,
     selDay, delDay, addDay, reorderDay, sortDaysByDate, updateDayName,
-    changeDayDateById, updateTripField,
+    changeDayDateById, updateDayLocation, updateTripField,
     delEvt, reorderEvt, delPool, addMember, delMember, addExpense, delExpense, updateExpense,
     toast, applyRemoteTrip,
     addMemory, delMemory, toggleTripCompleted, clientId,
@@ -73,6 +73,7 @@ export default function TabiApp() {
   const [dayEditId, setDayEditId] = useState<string | null>(null);
   const [dayEditName, setDayEditName] = useState("");
   const [dayEditDate, setDayEditDate] = useState("");
+  const [dayEditLocation, setDayEditLocation] = useState("");
   const [evtInitialSpot, setEvtInitialSpot] = useState<PoolSpot | null>(null);
   const [memoImportOpen, setMemoImportOpen] = useState(false);
   const [tripPeriodModalOpen, setTripPeriodModalOpen] = useState(false);
@@ -185,16 +186,17 @@ export default function TabiApp() {
   const openDayEditModal = useCallback((dayId: string) => {
     const dd = t?.days.find(d => d.id === dayId);
     if (!dd) return;
-    setDayEditId(dayId); setDayEditName(dd.name || ""); setDayEditDate(dd.date || ""); setDayEditModalOpen(true);
+    setDayEditId(dayId); setDayEditName(dd.name || ""); setDayEditDate(dd.date || ""); setDayEditLocation(dd.location || ""); setDayEditModalOpen(true);
   }, [t]);
 
   const handleDayEditSave = useCallback(() => {
     if (!dayEditId) return;
     changeDayDateById(dayEditId, dayEditDate);
     updateDayName(dayEditId, dayEditName);
+    updateDayLocation(dayEditId, dayEditLocation);
     setDayEditModalOpen(false);
     toast("✅ Day情報を更新しました", "#10b981");
-  }, [dayEditId, dayEditDate, dayEditName, changeDayDateById, updateDayName, toast]);
+  }, [dayEditId, dayEditDate, dayEditName, dayEditLocation, changeDayDateById, updateDayName, updateDayLocation, toast]);
 
   const handleMapFocus = useCallback((eid: string) => {
     setTab("map"); setTimeout(() => setFocusEventId(eid), 100);
@@ -573,7 +575,7 @@ export default function TabiApp() {
       )}
       {poolModalOpen && (
         <PoolModal
-          day={d} editPoolId={editPoolId} destination={t?.destination}
+          day={d} editPoolId={editPoolId} destination={d?.location || t?.destination}
           onClose={() => setPoolModalOpen(false)}
           onSave={(data: Omit<PoolSpot, "id">) => { ctx.savePool(data, editPoolId ?? undefined); setPoolModalOpen(false); }}
         />
@@ -582,7 +584,7 @@ export default function TabiApp() {
         <MemoImportModal
           onClose={() => setMemoImportOpen(false)}
           onImportMultiDay={handleMemoImport}
-          dayDate={d.date || ""} destination={t?.destination || ""}
+          dayDate={d.date || ""} destination={d.location || t?.destination || ""}
           tripDays={t?.days || []} currentDayIndex={currentDayIdx}
         />
       )}
@@ -619,6 +621,17 @@ export default function TabiApp() {
                   onChange={e => setDayEditDate(e.target.value)}
                   className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-sm outline-none box-border cursor-pointer focus:border-blue-300"
                 />
+              </div>
+              <div>
+                <label htmlFor="day-edit-location" className="text-[11px] font-bold text-slate-500 block mb-1">この日の場所（任意）</label>
+                <input
+                  id="day-edit-location"
+                  value={dayEditLocation}
+                  onChange={e => setDayEditLocation(e.target.value)}
+                  placeholder={t?.destination ? `未設定なら「${t.destination}」を使用` : "例：大阪"}
+                  className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-sm outline-none box-border focus:border-blue-300"
+                />
+                <div className="text-[10px] text-slate-400 mt-1">天気表示・スポット検索の地域を、この日だけ変えたいときに設定してください</div>
               </div>
               <div className="flex gap-2 mt-1">
                 <button onClick={() => setDayEditModalOpen(false)} className="flex-1 bg-slate-100 border-none rounded-lg py-2 text-sm font-bold cursor-pointer text-slate-500 hover:bg-slate-200 transition-colors">キャンセル</button>
@@ -676,7 +689,7 @@ export default function TabiApp() {
 
 // ===== DayTabBar =====
 function SortableDayTab({ day, index, isActive, onSelect, onDel, onEdit, destination }: {
-  day: { id: string; date: string; name?: string }; index: number; isActive: boolean;
+  day: { id: string; date: string; name?: string; location?: string }; index: number; isActive: boolean;
   onSelect: (id: string) => void; onDel: (id: string) => void; onEdit: (id: string) => void; destination?: string;
 }) {
   const color = DC[index % DC.length];
@@ -701,7 +714,7 @@ function SortableDayTab({ day, index, isActive, onSelect, onDel, onEdit, destina
         <div {...attributes} {...listeners} className="cursor-grab text-slate-300 text-[10px] leading-none mb-px touch-none" title="ドラッグして並び替え">⠇</div>
         <span style={{ color: isActive ? color : undefined }} className="font-extrabold text-xs">Day {index + 1}{day.name ? ` ・ ${day.name}` : ""}</span>
         <span className={`text-[9px] ${day.date ? "text-slate-500" : "text-slate-300"}`}>{day.date ? dsub(day.date) : "未設定"}</span>
-        {day.date && <WeatherBadge date={day.date} destination={destination} compact />}
+        {day.date && <WeatherBadge date={day.date} destination={day.location || destination} compact />}
       </div>
       <button onClick={e => { e.stopPropagation(); onEdit(day.id); }} aria-label="Dayを編集" className="absolute -top-1 right-3 bg-slate-200 border-none rounded-full w-3.5 h-3.5 text-slate-500 cursor-pointer text-[8px] flex items-center justify-center leading-none hover:bg-slate-300">✎</button>
       <button onClick={e => { e.stopPropagation(); onDel(day.id); }} aria-label="Dayを削除" className="absolute -top-1 -right-1 bg-slate-200 border-none rounded-full w-3.5 h-3.5 text-slate-500 cursor-pointer text-[9px] flex items-center justify-center leading-none hover:bg-red-200">×</button>

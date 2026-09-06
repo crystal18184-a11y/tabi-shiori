@@ -17,11 +17,14 @@ interface Props {
 export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, clientId, onClose, onSave }: Props) {
   const existing = editEvtId ? trip?.days.flatMap(d => d.events).find(e => e.id === editEvtId) : null;
   const [toDid, setToDid] = useState(editFromDay);
+  // AI場所検索の地域バイアスは、保存先のDayに個別設定があればそれを優先する
+  const targetDay = trip?.days.find(d => d.id === toDid);
+  const effectiveDestination = targetDay?.location || trip?.destination;
 
   const form = useEvtForm({
     existing,
     initialSpot,
-    tripDestination: trip?.destination,
+    tripDestination: effectiveDestination,
     clientId,
   });
 
