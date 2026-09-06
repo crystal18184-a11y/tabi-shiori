@@ -258,48 +258,52 @@ export default function TabiApp() {
       <div className="w-[96vw] h-[94vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
 
         {/* ⑥ アクセシビリティ: role・aria属性付きトップバー */}
-        <header role="banner" className="flex items-center gap-2 px-3 py-2 bg-m3-surface m3-elevation-1 flex-shrink-0 flex-wrap relative z-10">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            aria-label="メニューを開く"
-            aria-expanded={sidebarOpen}
-            className="w-8 h-8 flex items-center justify-center text-sm font-bold text-m3-on-surface-variant m3-icon-btn cursor-pointer"
-          >☰</button>
-          <input
-            value={t?.name || ""}
-            placeholder="旅行名"
-            aria-label="旅行名"
-            onChange={e => updateTripField("name", e.target.value)}
-            className="bg-transparent border-0 border-b-2 border-slate-200 text-slate-900 text-sm font-bold px-1 py-0.5 outline-none flex-1 min-w-14 font-serif focus:border-blue-400 transition-colors"
-          />
-          <input
-            value={t?.destination || ""}
-            placeholder="📍 目的地"
-            aria-label="目的地"
-            onChange={e => updateTripField("destination", e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded-lg text-slate-500 text-xs px-2 py-1 outline-none w-24 focus:border-blue-300 transition-colors"
-          />
-          <button
-            onClick={doUndo}
-            disabled={!canUndo}
-            aria-label="操作を元に戻す"
-            className={`px-2 py-1.5 text-xs font-bold rounded-lg border transition-colors ${canUndo ? "bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100" : "bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed"}`}
-          >↩ 戻す</button>
-          <button
-            onClick={() => { if (t) exportTripPdf(t); }}
-            aria-label="PDFとして保存"
-            className="px-2 py-1.5 text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors"
-          >📄 PDF</button>
-          <button
-            onClick={() => setImageExportOpen(true)}
-            aria-label="SNS用画像を作成"
-            className="px-2 py-1.5 text-xs font-bold bg-pink-50 text-pink-700 border border-pink-200 rounded-lg hover:bg-pink-100 transition-colors"
-          >📸 SNS</button>
-          <button
-            onClick={() => { setShareStatus(""); setShareModalOpen(true); }}
-            aria-label={shareCode ? "共有中 - 共有設定を開く" : "共有設定を開く"}
-            className={`px-2 py-1.5 text-xs font-bold rounded-lg border transition-colors ${shareCode ? "bg-green-50 text-green-800 border-green-200 hover:bg-green-100" : "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"}`}
-          >{shareCode ? "🔗 共有中" : "🔗 共有"}</button>
+        <header role="banner" className="flex flex-col gap-1.5 px-3 py-2 bg-m3-surface m3-elevation-1 flex-shrink-0 relative z-10">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              aria-label="メニューを開く"
+              aria-expanded={sidebarOpen}
+              className="w-8 h-8 flex-shrink-0 flex items-center justify-center text-sm font-bold text-m3-on-surface-variant m3-icon-btn cursor-pointer"
+            >☰</button>
+            <input
+              value={t?.name || ""}
+              placeholder="旅行名"
+              aria-label="旅行名"
+              onChange={e => updateTripField("name", e.target.value)}
+              className="bg-transparent border-0 border-b-2 border-slate-200 text-slate-900 text-sm font-bold px-1 py-0.5 outline-none flex-1 min-w-0 font-serif focus:border-blue-400 transition-colors"
+            />
+            <input
+              value={t?.destination || ""}
+              placeholder="📍 目的地"
+              aria-label="目的地"
+              onChange={e => updateTripField("destination", e.target.value)}
+              className="bg-slate-50 border border-slate-200 rounded-lg text-slate-500 text-xs px-2 py-1 outline-none w-20 flex-shrink-0 focus:border-blue-300 transition-colors"
+            />
+          </div>
+          <div className="flex items-center gap-1.5 pl-10 flex-wrap">
+            <button
+              onClick={doUndo}
+              disabled={!canUndo}
+              aria-label="操作を元に戻す"
+              className={`px-2 py-1.5 text-xs font-bold rounded-lg border transition-colors ${canUndo ? "bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100" : "bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed"}`}
+            >↩ 戻す</button>
+            <button
+              onClick={() => { if (t) exportTripPdf(t); }}
+              aria-label="PDFとして保存"
+              className="px-2 py-1.5 text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors"
+            >📄 PDF</button>
+            <button
+              onClick={() => setImageExportOpen(true)}
+              aria-label="SNS用画像を作成"
+              className="px-2 py-1.5 text-xs font-bold bg-pink-50 text-pink-700 border border-pink-200 rounded-lg hover:bg-pink-100 transition-colors"
+            >📸 SNS</button>
+            <button
+              onClick={() => { setShareStatus(""); setShareModalOpen(true); }}
+              aria-label={shareCode ? "共有中 - 共有設定を開く" : "共有設定を開く"}
+              className={`px-2 py-1.5 text-xs font-bold rounded-lg border transition-colors ${shareCode ? "bg-green-50 text-green-800 border-green-200 hover:bg-green-100" : "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"}`}
+            >{shareCode ? "🔗 共有中" : "🔗 共有"}</button>
+          </div>
         </header>
 
         {/* ボディ */}
