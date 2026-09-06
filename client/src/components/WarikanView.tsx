@@ -104,7 +104,7 @@ export default function WarikanView({
   return (
     <section aria-label="割り勘" className="flex-1 overflow-y-auto p-3 flex flex-col gap-4">
       {/* メンバー管理 */}
-      <div className="bg-m3-surface rounded-xl border border-m3-outline-variant m3-elevation-1 p-3">
+      <div className="bg-m3-surface rounded-2xl border border-m3-outline-variant m3-elevation-1 p-3">
         <h3 className="text-xs font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">👥 メンバー</h3>
         <div className="flex gap-1.5 mb-2">
           <input
@@ -119,7 +119,7 @@ export default function WarikanView({
           <button
             onClick={onAddMember}
             aria-label="メンバーを追加"
-            className="bg-m3-primary text-m3-on-primary border-none rounded-lg px-3 py-2 text-xs font-bold cursor-pointer hover:opacity-90 transition-opacity"
+            className="bg-m3-primary text-m3-on-primary border-none rounded-full px-4 py-2 text-xs font-bold cursor-pointer hover:opacity-90 transition-opacity"
           >追加</button>
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -138,7 +138,7 @@ export default function WarikanView({
       </div>
 
       {/* レート設定 */}
-      <div className="bg-m3-surface rounded-xl border border-m3-outline-variant m3-elevation-1 p-3">
+      <div className="bg-m3-surface rounded-2xl border border-m3-outline-variant m3-elevation-1 p-3">
         <h3 className="text-xs font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">💱 為替レート設定</h3>
         <p className="text-[10px] text-m3-on-surface-variant mb-2">USD・EURの支出を円換算するためのレートです。最新レートはご自身でご確認の上、手入力してください。</p>
         <div className="flex flex-col gap-2">
@@ -173,7 +173,7 @@ export default function WarikanView({
 
       {/* 支出追加 */}
       {members.length >= 2 && (
-        <div className="bg-m3-surface rounded-xl border border-m3-outline-variant m3-elevation-1 p-3">
+        <div className="bg-m3-surface rounded-2xl border border-m3-outline-variant m3-elevation-1 p-3">
           <h3 className="text-xs font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">💸 支出を追加</h3>
           <div className="flex flex-col gap-2">
             <input
@@ -232,7 +232,7 @@ export default function WarikanView({
             </div>
             <button
               onClick={onAddExpense}
-              className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-none rounded-lg py-2 text-sm font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all"
+              className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-none rounded-full py-2 text-sm font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all"
             >＋ 支出を記録</button>
           </div>
         </div>
@@ -240,7 +240,7 @@ export default function WarikanView({
 
       {/* 支出一覧 */}
       {expenses.length > 0 && (
-        <div className="bg-m3-surface rounded-xl border border-m3-outline-variant m3-elevation-1 p-3">
+        <div className="bg-m3-surface rounded-2xl border border-m3-outline-variant m3-elevation-1 p-3">
           <h3 className="text-xs font-bold text-m3-on-surface-variant uppercase tracking-wider mb-2">📋 支出一覧</h3>
           <div className="flex flex-col gap-2 mb-2">
             {expenses.map(e => {
@@ -283,7 +283,7 @@ export default function WarikanView({
       {/* 支出編集モーダル */}
       {editingExpId && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[400] p-3" onClick={e => e.target === e.currentTarget && setEditingExpId(null)}>
-          <div className="bg-m3-surface rounded-2xl w-full max-w-sm m3-elevation-2 flex flex-col" onClick={e => e.stopPropagation()}>
+          <div className="bg-m3-surface rounded-3xl w-full max-w-sm m3-elevation-2 flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center px-4 py-3 border-b border-m3-outline-variant">
               <h3 className="font-bold text-sm text-m3-on-surface">支出を編集</h3>
               <button onClick={() => setEditingExpId(null)} className="text-m3-on-surface-variant hover:text-m3-on-surface text-lg font-bold bg-transparent border-none cursor-pointer">×</button>
@@ -325,8 +325,8 @@ export default function WarikanView({
               </div>
             </div>
             <div className="flex gap-2 px-4 pb-4 justify-end">
-              <button onClick={() => setEditingExpId(null)} className="bg-m3-surface-variant border-none rounded-lg text-m3-on-surface-variant px-3 py-1.5 text-xs cursor-pointer hover:opacity-80 transition-opacity">キャンセル</button>
-              <button onClick={saveEditExp} className="bg-gradient-to-r from-blue-500 to-indigo-500 border-none rounded-lg text-white px-4 py-1.5 text-xs font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all">保存する</button>
+              <button onClick={() => setEditingExpId(null)} className="bg-m3-surface-variant border-none rounded-full text-m3-on-surface-variant px-3 py-1.5 text-xs cursor-pointer hover:opacity-80 transition-opacity">キャンセル</button>
+              <button onClick={saveEditExp} className="bg-gradient-to-r from-blue-500 to-indigo-500 border-none rounded-full text-white px-4 py-1.5 text-xs font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all">保存する</button>
             </div>
           </div>
         </div>
@@ -334,11 +334,11 @@ export default function WarikanView({
 
       {/* 精算結果 */}
       {settlements.length > 0 && (
-        <div className="bg-green-50 rounded-xl border border-green-200 shadow-sm p-3">
+        <div className="bg-green-50 rounded-2xl border border-green-200 shadow-sm p-3">
           <h3 className="text-xs font-bold text-green-800 uppercase tracking-wider mb-2">✅ 精算結果</h3>
           <div className="flex flex-col gap-2">
             {settlements.map((s, i) => (
-              <div key={i} className="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-green-100">
+              <div key={i} className="flex items-center gap-2 bg-white rounded-xl px-3 py-2 border border-green-100">
                 <span className="text-sm font-bold text-slate-700">{s.fromName}</span>
                 <span className="text-slate-400">→</span>
                 <span className="text-sm font-bold text-slate-700">{s.toName}</span>
@@ -349,7 +349,7 @@ export default function WarikanView({
         </div>
       )}
       {members.length >= 2 && expenses.length > 0 && settlements.length === 0 && (
-        <div className="bg-green-50 rounded-xl border border-green-200 p-3 text-center text-sm font-semibold text-green-700">
+        <div className="bg-green-50 rounded-2xl border border-green-200 p-3 text-center text-sm font-semibold text-green-700">
           🎉 精算不要！みんな均等です
         </div>
       )}

@@ -132,7 +132,7 @@ export default function MemoImportModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-m3-surface rounded-t-2xl sm:rounded-2xl m3-elevation-2 w-full max-w-lg max-h-[90vh] flex flex-col">
+      <div className="bg-m3-surface rounded-t-3xl sm:rounded-3xl m3-elevation-2 w-full max-w-lg max-h-[90vh] flex flex-col">
         {/* ヘッダー */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-m3-outline-variant">
           <div>
@@ -210,7 +210,7 @@ export default function MemoImportModal({
                   <button
                     key={i}
                     onClick={() => toggleSelect(i)}
-                    className={`w-full text-left rounded-xl border-2 p-3 transition-all ${
+                    className={`w-full text-left rounded-2xl border-2 p-3 transition-all ${
                       isSelected
                         ? "border-blue-400 bg-blue-50"
                         : "border-m3-outline-variant bg-m3-surface-variant opacity-60"
@@ -281,14 +281,14 @@ export default function MemoImportModal({
             <>
               <button
                 onClick={onClose}
-                className="flex-1 py-2.5 rounded-xl border border-m3-outline-variant text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant"
+                className="flex-1 py-2.5 rounded-full border border-m3-outline-variant text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant"
               >
                 キャンセル
               </button>
               <button
                 onClick={handleParse}
                 disabled={!memo.trim() || parseMemo.isPending}
-                className="flex-1 py-2.5 rounded-xl bg-blue-500 text-white text-sm font-semibold hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 py-2.5 rounded-full bg-blue-500 text-white text-sm font-semibold hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {parseMemo.isPending ? (
                   <>
@@ -307,14 +307,14 @@ export default function MemoImportModal({
                   setStep("input");
                   setError(null);
                 }}
-                className="flex-1 py-2.5 rounded-xl border border-m3-outline-variant text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant"
+                className="flex-1 py-2.5 rounded-full border border-m3-outline-variant text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant"
               >
                 ← 戻る
               </button>
               <button
                 onClick={handleImport}
                 disabled={selected.size === 0}
-                className="flex-1 py-2.5 rounded-xl bg-green-500 text-white text-sm font-semibold hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-2.5 rounded-full bg-green-500 text-white text-sm font-semibold hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 ✅ {selected.size}件を登録する
               </button>

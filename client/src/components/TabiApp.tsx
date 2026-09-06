@@ -286,22 +286,22 @@ export default function TabiApp() {
               onClick={doUndo}
               disabled={!canUndo}
               aria-label="操作を元に戻す"
-              className={`px-2 py-1.5 text-xs font-bold rounded-lg border transition-colors ${canUndo ? "bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100" : "bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed"}`}
+              className={`px-2 py-1.5 text-xs font-bold rounded-full border transition-colors ${canUndo ? "bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100" : "bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed"}`}
             >↩ 戻す</button>
             <button
               onClick={() => { if (t) exportTripPdf(t); }}
               aria-label="PDFとして保存"
-              className="px-2 py-1.5 text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors"
+              className="px-2 py-1.5 text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 rounded-full hover:bg-amber-100 transition-colors"
             >📄 PDF</button>
             <button
               onClick={() => setImageExportOpen(true)}
               aria-label="SNS用画像を作成"
-              className="px-2 py-1.5 text-xs font-bold bg-pink-50 text-pink-700 border border-pink-200 rounded-lg hover:bg-pink-100 transition-colors"
+              className="px-2 py-1.5 text-xs font-bold bg-pink-50 text-pink-700 border border-pink-200 rounded-full hover:bg-pink-100 transition-colors"
             >📸 SNS</button>
             <button
               onClick={() => { setShareStatus(""); setShareModalOpen(true); }}
               aria-label={shareCode ? "共有中 - 共有設定を開く" : "共有設定を開く"}
-              className={`px-2 py-1.5 text-xs font-bold rounded-lg border transition-colors ${shareCode ? "bg-green-50 text-green-800 border-green-200 hover:bg-green-100" : "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"}`}
+              className={`px-2 py-1.5 text-xs font-bold rounded-full border transition-colors ${shareCode ? "bg-green-50 text-green-800 border-green-200 hover:bg-green-100" : "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"}`}
             >{shareCode ? "🔗 共有中" : "🔗 共有"}</button>
           </div>
         </header>
@@ -342,7 +342,7 @@ export default function TabiApp() {
                 <button
                   onClick={() => setMemoImportOpen(true)}
                   aria-label="メモから予定を一括登録"
-                  className="bg-green-50 border border-green-300 rounded-lg text-green-700 px-2.5 py-1.5 text-[10px] font-bold cursor-pointer whitespace-nowrap hover:bg-green-100 transition-colors"
+                  className="bg-green-50 border border-green-300 rounded-full text-green-700 px-2.5 py-1.5 text-[10px] font-bold cursor-pointer whitespace-nowrap hover:bg-green-100 transition-colors"
                 >📋 メモ読み取り</button>
               </div>
             )}
@@ -351,7 +351,7 @@ export default function TabiApp() {
                 <button
                   onClick={() => openPoolForm(null)}
                   aria-label="スポットを追加"
-                  className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg px-3 py-1.5 text-xs font-bold cursor-pointer whitespace-nowrap hover:from-blue-600 hover:to-indigo-600 transition-all"
+                  className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full px-3 py-1.5 text-xs font-bold cursor-pointer whitespace-nowrap hover:from-blue-600 hover:to-indigo-600 transition-all"
                 >＋ スポット追加</button>
               </div>
             )}
@@ -376,12 +376,12 @@ export default function TabiApp() {
                   <button
                     onClick={() => setMapMode("all")}
                     aria-pressed={mapMode === "all"}
-                    className={`px-2 py-1 text-xs font-semibold rounded-lg border transition-colors ${mapMode === "all" ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface text-m3-on-surface-variant border-m3-outline hover:border-m3-primary"}`}
+                    className={`px-2 py-1 text-xs font-semibold rounded-full border transition-colors ${mapMode === "all" ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface text-m3-on-surface-variant border-m3-outline hover:border-m3-primary"}`}
                   >🌐 全日程</button>
                   <button
                     onClick={() => setMapMode("day")}
                     aria-pressed={mapMode === "day"}
-                    className={`px-2 py-1 text-xs font-semibold rounded-lg border transition-colors ${mapMode === "day" ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface text-m3-on-surface-variant border-m3-outline hover:border-m3-primary"}`}
+                    className={`px-2 py-1 text-xs font-semibold rounded-full border transition-colors ${mapMode === "day" ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface text-m3-on-surface-variant border-m3-outline hover:border-m3-primary"}`}
                   >📅 この日</button>
                   {(() => {
                     const poolWithCoords = (mapMode === "all"
@@ -467,7 +467,7 @@ export default function TabiApp() {
             </div>
             <button
               onClick={() => { setWizardIsFirst(false); setWizardOpen(true); setSidebarOpen(false); }}
-              className="mx-2.5 my-2 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-sm rounded-xl cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all m3-elevation-1"
+              className="mx-2.5 my-2 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-sm rounded-2xl cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all m3-elevation-1"
             >＋ 旅行を追加</button>
             <nav aria-label="旅行一覧" className="flex-1 overflow-y-auto px-1.5">
               {state.trips.map(tr => (
@@ -478,7 +478,7 @@ export default function TabiApp() {
                   onClick={() => { selTrip(tr.id); setSidebarOpen(false); }}
                   onKeyDown={e => e.key === "Enter" && (selTrip(tr.id), setSidebarOpen(false))}
                   aria-current={tr.id === state.tid ? "true" : undefined}
-                  className={`flex items-center gap-1.5 px-2 py-2 rounded-lg cursor-pointer transition-colors ${tr.id === state.tid ? "bg-m3-primary-container" : "hover:bg-m3-surface-variant"}`}
+                  className={`flex items-center gap-1.5 px-2 py-2 rounded-2xl cursor-pointer transition-colors ${tr.id === state.tid ? "bg-m3-primary-container" : "hover:bg-m3-surface-variant"}`}
                 >
                   <span>🌏</span>
                   <span className="flex-1 text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap text-m3-on-surface">{tr.name}</span>
@@ -515,7 +515,7 @@ export default function TabiApp() {
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-[300] p-4"
           onClick={e => e.target === e.currentTarget && setShareModalOpen(false)}
         >
-          <div className="bg-m3-surface rounded-2xl w-full max-w-sm m3-elevation-2 overflow-hidden">
+          <div className="bg-m3-surface rounded-3xl w-full max-w-sm m3-elevation-2 overflow-hidden">
             <div className="flex justify-between items-center px-4 py-3.5 border-b border-m3-outline-variant">
               <h2 id="share-modal-title" className="font-extrabold text-sm text-m3-on-surface">🔗 リアルタイム共有</h2>
               <button onClick={() => setShareModalOpen(false)} aria-label="閉じる" className="w-7 h-7 flex items-center justify-center bg-transparent border-none text-xl text-m3-on-surface-variant cursor-pointer leading-none m3-icon-btn">×</button>
@@ -527,14 +527,14 @@ export default function TabiApp() {
                   <button
                     onClick={handleStartSharing}
                     disabled={syncing}
-                    className={`w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl py-3 text-sm font-bold transition-all m3-elevation-1 ${syncing ? "opacity-70 cursor-not-allowed" : "hover:from-blue-600 hover:to-indigo-600"}`}
+                    className={`w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full py-3 text-sm font-bold transition-all m3-elevation-1 ${syncing ? "opacity-70 cursor-not-allowed" : "hover:from-blue-600 hover:to-indigo-600"}`}
                   >{syncing ? "⏳ 作成中..." : "🔗 共有コードを発行する"}</button>
                 ) : (
-                  <div className="bg-green-50 border border-green-200 rounded-xl p-3">
+                  <div className="bg-green-50 border border-green-200 rounded-2xl p-3">
                     <div className="text-[10px] font-bold text-green-800 mb-1.5">共有コード</div>
                     <div className="flex items-center gap-2 mb-2">
                       <span className="font-mono text-2xl font-black text-green-800 tracking-widest flex-1">{shareCode}</span>
-                      <button onClick={() => { navigator.clipboard.writeText(shareCode); toast("コードをコピーしました！", "#10b981"); }} className="bg-white border border-green-200 rounded-lg text-green-800 px-2.5 py-1 text-xs cursor-pointer hover:bg-green-50">コピー</button>
+                      <button onClick={() => { navigator.clipboard.writeText(shareCode); toast("コードをコピーしました！", "#10b981"); }} className="bg-white border border-green-200 rounded-full text-green-800 px-2.5 py-1 text-xs cursor-pointer hover:bg-green-50">コピー</button>
                     </div>
                     <div className="text-[10px] text-green-700 leading-relaxed">このコードを共有相手に伝えてください。変更は約5秒ごとに自動同期されます。</div>
                     <button onClick={() => { stopSharing(); setShareStatus(""); }} className="mt-2 bg-transparent border-none text-m3-on-surface-variant text-xs cursor-pointer p-0 hover:text-m3-on-surface">共有を停止する</button>
@@ -561,7 +561,7 @@ export default function TabiApp() {
                   <button
                     onClick={handleJoinSharing}
                     disabled={syncing || !joinCode.trim()}
-                    className={`rounded-lg px-4 py-2 text-sm font-bold whitespace-nowrap transition-colors ${joinCode.trim() ? "bg-m3-primary text-m3-on-primary hover:opacity-90" : "bg-m3-surface-variant text-m3-on-surface-variant cursor-not-allowed"}`}
+                    className={`rounded-full px-4 py-2 text-sm font-bold whitespace-nowrap transition-colors ${joinCode.trim() ? "bg-m3-primary text-m3-on-primary hover:opacity-90" : "bg-m3-surface-variant text-m3-on-surface-variant cursor-not-allowed"}`}
                   >参加</button>
                 </div>
               </div>
@@ -606,7 +606,7 @@ export default function TabiApp() {
           className="fixed inset-0 bg-black/45 z-[1000] flex items-center justify-center"
           onClick={e => e.target === e.currentTarget && setDayEditModalOpen(false)}
         >
-          <div className="bg-m3-surface rounded-2xl p-5 w-72 m3-elevation-2" onClick={e => e.stopPropagation()}>
+          <div className="bg-m3-surface rounded-3xl p-5 w-72 m3-elevation-2" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h3 id="day-edit-title" className="font-extrabold text-sm text-m3-on-surface">📅 Dayを編集</h3>
               <button onClick={() => setDayEditModalOpen(false)} aria-label="閉じる" className="w-7 h-7 flex items-center justify-center bg-transparent border-none text-lg cursor-pointer text-m3-on-surface-variant m3-icon-btn">×</button>
@@ -644,13 +644,13 @@ export default function TabiApp() {
                 <div className="text-[10px] text-m3-on-surface-variant mt-1">天気表示・スポット検索の地域を、この日だけ変えたいときに設定してください</div>
               </div>
               <div className="flex gap-2 mt-1">
-                <button onClick={() => setDayEditModalOpen(false)} className="flex-1 bg-m3-surface-variant border-none rounded-lg py-2 text-sm font-bold cursor-pointer text-m3-on-surface-variant hover:bg-m3-outline-variant transition-colors">キャンセル</button>
-                <button onClick={handleDayEditSave} className="flex-[2] bg-gradient-to-r from-blue-500 to-indigo-500 border-none rounded-lg py-2 text-sm font-bold cursor-pointer text-white hover:from-blue-600 hover:to-indigo-600 transition-all">保存</button>
+                <button onClick={() => setDayEditModalOpen(false)} className="flex-1 bg-m3-surface-variant border-none rounded-full py-2 text-sm font-bold cursor-pointer text-m3-on-surface-variant hover:bg-m3-outline-variant transition-colors">キャンセル</button>
+                <button onClick={handleDayEditSave} className="flex-[2] bg-gradient-to-r from-blue-500 to-indigo-500 border-none rounded-full py-2 text-sm font-bold cursor-pointer text-white hover:from-blue-600 hover:to-indigo-600 transition-all">保存</button>
               </div>
               {t && t.days.some(d => d.date) && (
                 <button
                   onClick={() => { sortDaysByDate(); setDayEditModalOpen(false); toast("🗓️ 日付順に並び替えました", "#10b981"); }}
-                  className="bg-green-50 border border-green-200 rounded-lg py-1.5 text-xs font-bold cursor-pointer text-green-700 w-full hover:bg-green-100 transition-colors"
+                  className="bg-green-50 border border-green-200 rounded-full py-1.5 text-xs font-bold cursor-pointer text-green-700 w-full hover:bg-green-100 transition-colors"
                 >🗓️ 日付順に自動並び替え</button>
               )}
             </div>
@@ -719,7 +719,7 @@ function SortableDayTab({ day, index, isActive, onSelect, onDel, onEdit, destina
         onClick={() => !isDragging && onSelect(day.id)}
         onKeyDown={e => e.key === "Enter" && !isDragging && onSelect(day.id)}
         style={{ borderTopColor: color, borderTopWidth: 3, background: isActive ? color + "18" : "var(--m3-surface-variant)", borderColor: isActive ? color : "var(--m3-outline-variant)" }}
-        className="border border-b-0 rounded-t-xl text-m3-on-surface-variant px-2.5 pt-1.5 pb-1 cursor-pointer text-[11px] min-w-[60px] flex flex-col items-center gap-px select-none transition-all"
+        className="border border-b-0 rounded-t-2xl text-m3-on-surface-variant px-2.5 pt-1.5 pb-1 cursor-pointer text-[11px] min-w-[60px] flex flex-col items-center gap-px select-none transition-all"
       >
         <div {...attributes} {...listeners} className="cursor-grab text-m3-on-surface-variant/60 text-[10px] leading-none mb-px touch-none" title="ドラッグして並び替え">⠇</div>
         <span style={{ color: isActive ? color : undefined }} className="font-extrabold text-xs">Day {index + 1}{day.name ? ` ・ ${day.name}` : ""}</span>
@@ -760,9 +760,9 @@ function DayTabBar({ days, activeDayId, onSelectDay, onDelDay, onAddDay, onEditD
             ))}
           </SortableContext>
         </DndContext>
-        <button onClick={onAddDay} aria-label="日程を追加" className="bg-transparent border border-dashed border-m3-outline rounded-t-xl text-m3-on-surface-variant px-2.5 py-1.5 cursor-pointer text-xs self-end whitespace-nowrap flex-shrink-0 hover:border-m3-primary hover:text-m3-primary transition-colors">＋ 日追加</button>
+        <button onClick={onAddDay} aria-label="日程を追加" className="bg-transparent border border-dashed border-m3-outline rounded-t-2xl text-m3-on-surface-variant px-2.5 py-1.5 cursor-pointer text-xs self-end whitespace-nowrap flex-shrink-0 hover:border-m3-primary hover:text-m3-primary transition-colors">＋ 日追加</button>
         {days.some(d => d.date) && (
-          <button onClick={onSortByDate} title="日付順に並び替え" className="bg-transparent border border-m3-outline-variant rounded-t-xl text-m3-on-surface-variant px-2 py-1.5 cursor-pointer text-[10px] self-end whitespace-nowrap flex-shrink-0 hover:bg-m3-surface-variant transition-colors">🗓️ 日付順</button>
+          <button onClick={onSortByDate} title="日付順に並び替え" className="bg-transparent border border-m3-outline-variant rounded-t-2xl text-m3-on-surface-variant px-2 py-1.5 cursor-pointer text-[10px] self-end whitespace-nowrap flex-shrink-0 hover:bg-m3-surface-variant transition-colors">🗓️ 日付順</button>
         )}
       </div>
     </div>
@@ -796,14 +796,14 @@ function TravelTimeWidget({ from, to }: { from: TabiEvent; to: TabiEvent }) {
 
   if (!expanded) return (
     <div className="flex justify-center my-1 ml-11">
-      <button onClick={() => { setExpanded(true); handleCalc(mode); }} className="bg-sky-50 border border-dashed border-blue-300 rounded-xl text-blue-500 px-2.5 py-0.5 text-[10px] font-semibold cursor-pointer flex items-center gap-1 hover:bg-sky-100 transition-colors">🚗 移動時間を計算</button>
+      <button onClick={() => { setExpanded(true); handleCalc(mode); }} className="bg-sky-50 border border-dashed border-blue-300 rounded-full text-blue-500 px-2.5 py-0.5 text-[10px] font-semibold cursor-pointer flex items-center gap-1 hover:bg-sky-100 transition-colors">🚗 移動時間を計算</button>
     </div>
   );
   return (
-    <div className="ml-11 mb-1.5 bg-sky-50 border border-blue-200 rounded-xl px-2.5 py-1.5">
+    <div className="ml-11 mb-1.5 bg-sky-50 border border-blue-200 rounded-2xl px-2.5 py-1.5">
       <div className="flex gap-1 mb-1 flex-wrap items-center">
         {WIDGET_MODES.map(tm => (
-          <button key={tm.key} onClick={() => handleCalc(tm.key)} aria-pressed={mode === tm.key} className={`rounded-lg px-2 py-0.5 text-[10px] font-semibold cursor-pointer flex items-center gap-0.5 border transition-colors ${mode === tm.key ? "bg-blue-500 text-white border-blue-500" : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"}`}>{tm.icon} {tm.label}</button>
+          <button key={tm.key} onClick={() => handleCalc(tm.key)} aria-pressed={mode === tm.key} className={`rounded-full px-2 py-0.5 text-[10px] font-semibold cursor-pointer flex items-center gap-0.5 border transition-colors ${mode === tm.key ? "bg-blue-500 text-white border-blue-500" : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"}`}>{tm.icon} {tm.label}</button>
         ))}
         <button onClick={() => setExpanded(false)} aria-label="閉じる" className="ml-auto bg-transparent border-none cursor-pointer text-[10px] text-slate-400 hover:text-slate-600">✕</button>
       </div>
@@ -840,7 +840,7 @@ function SortableEventCard({ event, index, total, dayId, onEdit, onDel, onAddToR
         <span className="text-[10px] font-bold text-m3-on-surface-variant mt-0.5 whitespace-nowrap">{event.time}</span>
         {index < total - 1 && <div className="flex-1 w-0.5 bg-m3-outline-variant min-h-4 rounded mx-auto my-0.5" />}
       </div>
-      <article className={`flex-1 bg-m3-surface rounded-xl px-3 py-2.5 mb-2 border border-m3-outline-variant ${isDragging ? "m3-elevation-2" : "m3-elevation-1"}`}>
+      <article className={`flex-1 bg-m3-surface rounded-2xl px-3 py-2.5 mb-2 border border-m3-outline-variant ${isDragging ? "m3-elevation-2" : "m3-elevation-1"}`}>
         <div className="flex justify-between items-center mb-1.5">
           <span style={{ background: c.c + "18", color: c.c, borderColor: c.c + "40" }} className="inline-flex gap-1 text-[10px] font-bold rounded-full px-2 py-0.5 border">{c.i} {event.category}</span>
           <div className="flex gap-0.5 items-center">
@@ -963,7 +963,7 @@ function TimelineView({ events, dayId, onEdit, onDel, onReorder, onAddToRecommen
         </SortableContext>
         <DragOverlay dropAnimation={{ duration: 150, easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)" }}>
           {activeEvent ? (
-            <div className="bg-white rounded-xl px-3 py-2.5 border-2 border-blue-500 shadow-blue-200 shadow-xl opacity-95 rotate-[1.5deg] scale-[1.02] cursor-grabbing">
+            <div className="bg-white rounded-2xl px-3 py-2.5 border-2 border-blue-500 shadow-blue-200 shadow-xl opacity-95 rotate-[1.5deg] scale-[1.02] cursor-grabbing">
               <span style={{ background: (CATS[activeEvent.category] || CATS["その他"]).c + "18", color: (CATS[activeEvent.category] || CATS["その他"]).c }} className="inline-flex gap-1 text-[10px] font-bold rounded-full px-2 py-0.5">{(CATS[activeEvent.category] || CATS["その他"]).i} {activeEvent.category}</span>
               <p className="text-sm font-bold text-slate-900 mt-1">{activeEvent.title}</p>
             </div>
@@ -1027,7 +1027,7 @@ function PoolView({ pool, onEdit, onDel, onAddToTimeline, onAddToRecommended, on
     <section aria-label="スポットプール" className="flex-1 overflow-hidden flex flex-col min-h-0">
       {headerArea}
       <div className="flex-1 overflow-y-auto p-3" style={{ WebkitOverflowScrolling: "touch" }}>
-        <div className="flex gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 mb-3">
+        <div className="flex gap-2 bg-amber-50 border border-amber-200 rounded-2xl px-3 py-2.5 mb-3">
           <span className="text-lg">🎯</span>
           <div>
             <p className="font-bold text-sm mb-0.5">ふんわりスポットプール</p>
@@ -1051,7 +1051,7 @@ function PoolView({ pool, onEdit, onDel, onAddToTimeline, onAddToRecommended, on
               <span className="text-[10px] text-m3-on-surface-variant bg-m3-surface-variant rounded-full px-1.5">{items.length}件</span>
             </div>
             {items.map(p => (
-              <article key={p.id} className="bg-m3-surface rounded-xl px-3 py-2.5 mb-2 border border-m3-outline-variant m3-elevation-1">
+              <article key={p.id} className="bg-m3-surface rounded-2xl px-3 py-2.5 mb-2 border border-m3-outline-variant m3-elevation-1">
                 <div className="flex justify-between items-center mb-1.5">
                   <span style={{ background: cfg.c + "18", color: cfg.c, borderColor: cfg.c + "40" }} className="inline-flex gap-1 text-[10px] font-bold rounded-full px-2 py-0.5 border">{cfg.i} {k}</span>
                   <div className="flex gap-0.5 items-center flex-wrap">

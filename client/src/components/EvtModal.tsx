@@ -51,15 +51,15 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
       className="fixed inset-0 bg-black/45 flex items-center justify-center z-[300] p-3"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-m3-surface rounded-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto m3-elevation-2 flex flex-col" onClick={e => e.stopPropagation()}>
+      <div className="bg-m3-surface rounded-3xl w-full max-w-lg max-h-[92vh] overflow-y-auto m3-elevation-2 flex flex-col" onClick={e => e.stopPropagation()}>
         {/* ヘッダー */}
         <div className="flex justify-between items-center px-4 py-3 border-b border-m3-outline-variant flex-shrink-0">
           <h2 id="evt-modal-title" className="font-bold text-sm text-m3-on-surface">
             {editEvtId ? "予定を編集" : "予定を追加"}
           </h2>
           <div className="flex gap-2">
-            <button onClick={onClose} className="bg-m3-surface-variant border-none rounded-lg text-m3-on-surface-variant px-3 py-1.5 text-xs cursor-pointer hover:bg-m3-outline-variant transition-colors">キャンセル</button>
-            <button onClick={handleSave} className="bg-gradient-to-r from-blue-500 to-indigo-500 border-none rounded-lg text-white px-4 py-1.5 text-xs font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all">保存する</button>
+            <button onClick={onClose} className="bg-m3-surface-variant border-none rounded-full text-m3-on-surface-variant px-3.5 py-1.5 text-xs cursor-pointer hover:bg-m3-outline-variant transition-colors">キャンセル</button>
+            <button onClick={handleSave} className="bg-gradient-to-r from-blue-500 to-indigo-500 border-none rounded-full text-white px-4 py-1.5 text-xs font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all">保存する</button>
           </div>
         </div>
 
@@ -102,7 +102,7 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
             />
             {/* AI候補ドロップダウン */}
             {form.showCandidates && form.placeCandidates.length > 0 && (
-              <div className="absolute top-full left-0 right-0 z-[400] bg-m3-surface border border-m3-outline-variant rounded-xl m3-elevation-2 overflow-hidden mt-0.5">
+              <div className="absolute top-full left-0 right-0 z-[400] bg-m3-surface border border-m3-outline-variant rounded-2xl m3-elevation-2 overflow-hidden mt-0.5">
                 <div className="px-2.5 py-1.5 text-[10px] font-bold text-m3-on-surface-variant border-b border-m3-outline-variant">📍 場所候補（クリックで選択）</div>
                 {form.placeCandidates.map((p, i) => (
                   <button
@@ -137,7 +137,7 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
                 onClick={() => form.handleUrlGeocode(form.url)}
                 disabled={form.geoLoading}
                 aria-label="URLを解析して住所・座標を取得"
-                className="bg-blue-50 border border-blue-200 rounded-lg text-blue-600 px-2.5 py-2 text-xs cursor-pointer whitespace-nowrap flex-shrink-0 hover:bg-blue-100 transition-colors disabled:opacity-50"
+                className="bg-blue-50 border border-blue-200 rounded-full text-blue-600 px-2.5 py-2 text-xs cursor-pointer whitespace-nowrap flex-shrink-0 hover:bg-blue-100 transition-colors disabled:opacity-50"
               >{form.geoLoading ? "⏳" : "🔍"} URL解析</button>
             </div>
             <p className="text-[10px] text-m3-on-surface-variant mt-0.5 leading-relaxed">① GoogleマップでURLをコピー → ② 上に貼り付け → ③「🔍 URL解析」で自動取得</p>
@@ -160,7 +160,7 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
                 onClick={form.handleGeocode}
                 disabled={form.geoLoading}
                 aria-label="住所から座標を取得"
-                className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-m3-on-surface-variant px-2.5 py-2 text-xs cursor-pointer whitespace-nowrap flex-shrink-0 hover:bg-m3-outline-variant transition-colors disabled:opacity-50"
+                className="bg-m3-surface-variant border border-m3-outline-variant rounded-full text-m3-on-surface-variant px-2.5 py-2 text-xs cursor-pointer whitespace-nowrap flex-shrink-0 hover:bg-m3-outline-variant transition-colors disabled:opacity-50"
               >{form.geoLoading ? "⏳" : "📍"} 座標取得</button>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
                   onClick={() => form.handleCalcTravelTime(prevEvent.lat, prevEvent.lng)}
                   disabled={form.travelLoading}
                   aria-label="前の予定からの移動時間を計算"
-                  className="w-full bg-amber-50 border border-amber-200 rounded-lg text-amber-600 px-3 py-2 text-xs font-bold cursor-pointer hover:bg-amber-100 transition-colors disabled:opacity-50"
+                  className="w-full bg-amber-50 border border-amber-200 rounded-full text-amber-600 px-3 py-2 text-xs font-bold cursor-pointer hover:bg-amber-100 transition-colors disabled:opacity-50"
                 >
                   {form.travelLoading ? "⏳" : "🚆"} 移動時間を計算（{prevEvent.title}から）
                 </button>
@@ -228,7 +228,7 @@ export default function EvtModal({ trip, editEvtId, editFromDay, initialSpot, cl
               <button
                 onClick={() => document.getElementById("evt-photo-file")?.click()}
                 aria-label="ファイルから写真を選択"
-                className="bg-m3-surface-variant border border-m3-outline-variant rounded-lg text-m3-on-surface-variant px-2.5 py-2 text-xs cursor-pointer flex-shrink-0 hover:bg-m3-outline-variant transition-colors"
+                className="bg-m3-surface-variant border border-m3-outline-variant rounded-full text-m3-on-surface-variant px-2.5 py-2 text-xs cursor-pointer flex-shrink-0 hover:bg-m3-outline-variant transition-colors"
               >📁</button>
               <input type="file" id="evt-photo-file" accept="image/*" className="hidden" onChange={form.handlePhotoChange} />
             </div>

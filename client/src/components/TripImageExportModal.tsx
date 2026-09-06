@@ -214,7 +214,7 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-[300] p-3"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-m3-surface rounded-2xl w-full max-w-sm max-h-[92vh] overflow-y-auto m3-elevation-2 flex flex-col" onClick={e => e.stopPropagation()}>
+      <div className="bg-m3-surface rounded-3xl w-full max-w-sm max-h-[92vh] overflow-y-auto m3-elevation-2 flex flex-col" onClick={e => e.stopPropagation()}>
         {/* ヘッダー */}
         <div className="flex justify-between items-center px-4 py-3 border-b border-m3-outline-variant flex-shrink-0">
           <h2 className="font-bold text-sm text-m3-on-surface">📸 SNS用画像を作成</h2>
@@ -230,7 +230,7 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
                 <button
                   key={key}
                   onClick={() => setFormat(key)}
-                  className={`flex-1 py-2 px-3 rounded-lg border text-xs font-semibold transition-colors cursor-pointer ${format === key ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface-variant text-m3-on-surface-variant border-m3-outline-variant hover:border-m3-outline"}`}
+                  className={`flex-1 py-2 px-3 rounded-full border text-xs font-semibold transition-colors cursor-pointer ${format === key ? "bg-m3-primary-container text-m3-on-primary-container border-transparent" : "bg-m3-surface-variant text-m3-on-surface-variant border-m3-outline-variant hover:border-m3-outline"}`}
                 >
                   <div>{cfg.label}</div>
                   <div className="text-[10px] opacity-70 mt-0.5">{cfg.desc}</div>
@@ -262,7 +262,7 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
             )}
             <canvas
               ref={canvasRef}
-              className={`w-full rounded-xl border border-m3-outline-variant m3-elevation-1 ${generated ? "block" : "hidden"}`}
+              className={`w-full rounded-2xl border border-m3-outline-variant m3-elevation-1 ${generated ? "block" : "hidden"}`}
               style={{ aspectRatio: format === "square" ? "1/1" : "9/16" }}
             />
           </div>
@@ -272,14 +272,14 @@ export default function TripImageExportModal({ trip, onClose }: Props) {
             <button
               onClick={handleGenerate}
               disabled={generating}
-              className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white border-none rounded-xl py-3 text-sm font-bold cursor-pointer hover:from-pink-600 hover:to-rose-600 transition-all disabled:opacity-50"
+              className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white border-none rounded-full py-3 text-sm font-bold cursor-pointer hover:from-pink-600 hover:to-rose-600 transition-all disabled:opacity-50"
             >
               {generating ? "⏳ 生成中..." : "✨ 画像を生成"}
             </button>
             {generated && (
               <button
                 onClick={handleDownload}
-                className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-none rounded-xl py-3 text-sm font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all"
+                className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-none rounded-full py-3 text-sm font-bold cursor-pointer hover:from-blue-600 hover:to-indigo-600 transition-all"
               >
                 💾 保存する
               </button>

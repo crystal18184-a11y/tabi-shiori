@@ -63,7 +63,7 @@ export default function MapSidebar({ trip, mapMode, currentDid, onFocusEvent, is
                     key={e.id}
                     onClick={() => onFocusEvent(e.id)}
                     aria-label={`${e.title}の位置を地図に表示`}
-                    className="w-full text-left bg-transparent border-none rounded-lg px-2 py-1.5 cursor-pointer hover:bg-m3-surface-variant transition-colors"
+                    className="w-full text-left bg-transparent border-none rounded-xl px-2 py-1.5 cursor-pointer hover:bg-m3-surface-variant transition-colors"
                   >
                     <div className="text-xs font-semibold text-m3-on-surface truncate">{e.title}</div>
                     {e.location && <div className="text-[10px] text-m3-on-surface-variant truncate">📍 {e.location}</div>}
@@ -83,7 +83,7 @@ export default function MapSidebar({ trip, mapMode, currentDid, onFocusEvent, is
                     key={p.id}
                     onClick={() => onFocusEvent(`pool_${p.id}`)}
                     aria-label={`${p.name}の位置を地図に表示`}
-                    className="w-full text-left bg-transparent border-none rounded-lg px-2 py-1.5 cursor-pointer hover:bg-amber-50 transition-colors"
+                    className="w-full text-left bg-transparent border-none rounded-xl px-2 py-1.5 cursor-pointer hover:bg-amber-50 transition-colors"
                   >
                     <div className="text-xs font-semibold text-m3-on-surface truncate">{p.name}</div>
                     {p.location && <div className="text-[10px] text-m3-on-surface-variant truncate">📍 {p.location}</div>}

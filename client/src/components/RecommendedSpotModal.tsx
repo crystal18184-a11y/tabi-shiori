@@ -146,11 +146,11 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
   return (
     <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center bg-black/50" onClick={onClose}>
       <div
-        className="bg-m3-surface w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto m3-elevation-2"
+        className="bg-m3-surface w-full sm:max-w-lg sm:rounded-3xl rounded-t-3xl max-h-[90vh] overflow-y-auto m3-elevation-2"
         onClick={e => e.stopPropagation()}
       >
         {/* ヘッダー */}
-        <div className="sticky top-0 bg-m3-surface border-b border-m3-outline-variant px-4 py-3 flex items-center justify-between rounded-t-2xl">
+        <div className="sticky top-0 bg-m3-surface border-b border-m3-outline-variant px-4 py-3 flex items-center justify-between rounded-t-3xl">
           <h2 className="font-bold text-base text-m3-on-surface">⭐ おすすめスポットを投稿</h2>
           <button onClick={onClose} className="text-m3-on-surface-variant hover:text-m3-on-surface text-xl leading-none">✕</button>
         </div>
@@ -170,7 +170,7 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
               <button
                 onClick={handleParseUrl}
                 disabled={parsing || !sourceUrl.trim()}
-                className="px-3 py-2 bg-blue-500 text-white text-xs rounded-lg disabled:opacity-40 hover:bg-blue-600 transition whitespace-nowrap"
+                className="px-3 py-2 bg-blue-500 text-white text-xs rounded-full disabled:opacity-40 hover:bg-blue-600 transition whitespace-nowrap"
               >
                 {parsing ? "解析中..." : "🔍 自動解析"}
               </button>
@@ -228,7 +228,7 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
               <button
                 onClick={handleGeocode}
                 disabled={geoLoading}
-                className="px-3 py-2 bg-green-500 text-white text-xs rounded-lg disabled:opacity-40 hover:bg-green-600 transition whitespace-nowrap"
+                className="px-3 py-2 bg-green-500 text-white text-xs rounded-full disabled:opacity-40 hover:bg-green-600 transition whitespace-nowrap"
               >
                 {geoLoading ? "取得中..." : "📍 座標取得"}
               </button>
@@ -283,14 +283,14 @@ export default function RecommendedSpotModal({ userId, userName, onClose, onSave
           <div className="flex gap-2 pt-2">
             <button
               onClick={onClose}
-              className="flex-1 py-2.5 border border-m3-outline rounded-xl text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant transition"
+              className="flex-1 py-2.5 border border-m3-outline rounded-full text-sm text-m3-on-surface-variant hover:bg-m3-surface-variant transition"
             >
               キャンセル
             </button>
             <button
               onClick={handleSave}
               disabled={saving || !placeName.trim()}
-              className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold disabled:opacity-40 hover:bg-blue-700 transition"
+              className="flex-1 py-2.5 bg-blue-600 text-white rounded-full text-sm font-bold disabled:opacity-40 hover:bg-blue-700 transition"
             >
               {saving ? "登録中..." : "✓ 登録する"}
             </button>

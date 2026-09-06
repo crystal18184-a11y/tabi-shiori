@@ -177,7 +177,7 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
             {showCandidates && placeCandidates.length > 0 && (
               <div style={{
                 position: "absolute", top: "100%", left: 0, right: 0, zIndex: 400,
-                background: "var(--m3-surface)", border: "1px solid var(--m3-outline-variant)", borderRadius: 10,
+                background: "var(--m3-surface)", border: "1px solid var(--m3-outline-variant)", borderRadius: 16,
                 boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.08), 0 2px 6px 2px rgb(0 0 0 / 0.1)", overflow: "hidden", marginTop: 2,
               }}>
                 <div style={{ padding: "6px 10px 4px", fontSize: 10, fontWeight: 700, color: "var(--m3-on-surface-variant)", borderBottom: "1px solid var(--m3-outline-variant)" }}>
@@ -216,7 +216,7 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
                     flex: 1,
                     background: priority === k ? v.c : "var(--m3-surface-variant)",
                     border: `1px solid ${priority === k ? v.c : "var(--m3-outline-variant)"}`,
-                    borderRadius: 7,
+                    borderRadius: 999,
                     color: priority === k ? "#fff" : "var(--m3-on-surface-variant)",
                     padding: "6px 3px",
                     fontSize: 10,
@@ -290,11 +290,11 @@ export default function PoolModal({ day, editPoolId, destination, onClose, onSav
 }
 
 const overlayStyle: React.CSSProperties = { position: "fixed", inset: 0, background: "rgba(0,0,0,.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 300, padding: 12 };
-const modalStyle: React.CSSProperties = { background: "var(--m3-surface)", borderRadius: 14, width: "100%", maxWidth: 490, maxHeight: "92vh", overflowY: "auto", boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.08), 0 2px 6px 2px rgb(0 0 0 / 0.1)", display: "flex", flexDirection: "column" };
+const modalStyle: React.CSSProperties = { background: "var(--m3-surface)", borderRadius: 24, width: "100%", maxWidth: 490, maxHeight: "92vh", overflowY: "auto", boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.08), 0 2px 6px 2px rgb(0 0 0 / 0.1)", display: "flex", flexDirection: "column" };
 const mHeadStyle: React.CSSProperties = { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "13px 17px 9px", borderBottom: "1px solid var(--m3-outline-variant)", flexShrink: 0 };
 const frStyle: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 4 };
 const lblStyle: React.CSSProperties = { fontSize: 10, fontWeight: 700, color: "var(--m3-on-surface-variant)", textTransform: "uppercase", letterSpacing: ".06em" };
 const inpStyle: React.CSSProperties = { background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 8, color: "var(--m3-on-surface)", fontSize: 13, padding: "7px 9px", outline: "none", width: "100%", fontFamily: "inherit" };
-const geoBtnStyle: React.CSSProperties = { background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 8, color: "var(--m3-on-surface-variant)", padding: "7px 9px", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 };
-const cancelBtnStyle: React.CSSProperties = { background: "var(--m3-surface-variant)", border: "none", borderRadius: 8, color: "var(--m3-on-surface-variant)", padding: "7px 15px", fontSize: 12, cursor: "pointer" };
-const saveBtnStyle: React.CSSProperties = { background: "linear-gradient(135deg,#3b82f6,#6366f1)", border: "none", borderRadius: 8, color: "#fff", padding: "7px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer" };
+const geoBtnStyle: React.CSSProperties = { background: "var(--m3-surface-variant)", border: "1px solid var(--m3-outline-variant)", borderRadius: 999, color: "var(--m3-on-surface-variant)", padding: "7px 9px", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 };
+const cancelBtnStyle: React.CSSProperties = { background: "var(--m3-surface-variant)", border: "none", borderRadius: 999, color: "var(--m3-on-surface-variant)", padding: "7px 15px", fontSize: 12, cursor: "pointer" };
+const saveBtnStyle: React.CSSProperties = { background: "linear-gradient(135deg,#3b82f6,#6366f1)", border: "none", borderRadius: 999, color: "#fff", padding: "7px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer" };

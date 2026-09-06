@@ -78,7 +78,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
           />
           <button
             onClick={handleSearch}
-            className="px-3 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition"
+            className="px-3 py-2 bg-blue-500 text-white text-sm rounded-full hover:bg-blue-600 transition"
           >
             🔍
           </button>
@@ -117,7 +117,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
           </div>
         )}
         {spots.map(spot => (
-          <div key={spot.id} className="bg-m3-surface rounded-xl border border-m3-outline-variant m3-elevation-1 overflow-hidden">
+          <div key={spot.id} className="bg-m3-surface rounded-2xl border border-m3-outline-variant m3-elevation-1 overflow-hidden">
             {/* 写真 */}
             {spot.photoUrl && (
               <img
@@ -175,7 +175,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
                 </div>
                 <button
                   onClick={() => handleAddToPool(spot)}
-                  className="flex items-center gap-1 px-2.5 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition font-medium"
+                  className="flex items-center gap-1 px-2.5 py-1.5 bg-blue-600 text-white text-xs rounded-full hover:bg-blue-700 transition font-medium"
                 >
                   ＋ スポットプールに追加
                 </button>
@@ -189,7 +189,7 @@ export default function RecommendedSpotsView({ onAddToPool, userId, userName }: 
       <div className="px-3 py-3 border-t border-m3-outline-variant bg-m3-surface">
         <button
           onClick={() => setShowModal(true)}
-          className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl text-sm font-bold hover:from-blue-600 hover:to-blue-700 transition shadow-sm"
+          className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-bold hover:from-blue-600 hover:to-blue-700 transition shadow-sm"
         >
           ⭐ おすすめスポットを投稿する
         </button>

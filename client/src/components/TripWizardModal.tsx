@@ -48,7 +48,7 @@ export default function TripWizardModal({ onClose, onCreate, isFirstTrip = false
 
   const modalStyle: React.CSSProperties = {
     background: "var(--m3-surface)",
-    borderRadius: 18,
+    borderRadius: 24,
     width: "100%",
     maxWidth: 420,
     boxShadow: "0 24px 64px rgba(0,0,0,.28)",
@@ -160,7 +160,7 @@ export default function TripWizardModal({ onClose, onCreate, isFirstTrip = false
             {!isFirstTrip && (
               <button
                 onClick={onClose}
-                style={{ flex: 1, padding: "11px", background: "var(--m3-surface-variant)", border: "none", borderRadius: 10, color: "var(--m3-on-surface-variant)", fontSize: 13, fontWeight: 700, cursor: "pointer" }}
+                style={{ flex: 1, padding: "11px", background: "var(--m3-surface-variant)", border: "none", borderRadius: 999, color: "var(--m3-on-surface-variant)", fontSize: 13, fontWeight: 700, cursor: "pointer" }}
               >
                 キャンセル
               </button>
@@ -170,7 +170,7 @@ export default function TripWizardModal({ onClose, onCreate, isFirstTrip = false
               style={{
                 flex: 2, padding: "11px",
                 background: "linear-gradient(135deg, #3b82f6, #6366f1)",
-                border: "none", borderRadius: 10,
+                border: "none", borderRadius: 999,
                 color: "#fff", fontSize: 14, fontWeight: 800,
                 cursor: "pointer", boxShadow: "0 4px 12px rgba(99,102,241,.35)",
               }}

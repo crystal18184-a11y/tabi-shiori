@@ -51,7 +51,7 @@ export default function TripPeriodModal({ onClose, onConfirm }: Props) {
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 400, padding: 16 }}
       onClick={e => e.target === e.currentTarget && onClose()}>
-      <div style={{ background: "var(--m3-surface)", borderRadius: 16, width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(0,0,0,.2)", overflow: "hidden" }}
+      <div style={{ background: "var(--m3-surface)", borderRadius: 24, width: "100%", maxWidth: 380, boxShadow: "0 20px 60px rgba(0,0,0,.2)", overflow: "hidden" }}
         onClick={e => e.stopPropagation()}>
 
         {/* ヘッダー */}
@@ -88,7 +88,7 @@ export default function TripPeriodModal({ onClose, onConfirm }: Props) {
 
           {/* プレビュー */}
           {days > 0 && (
-            <div style={{ background: "var(--m3-primary-container)", border: "1px solid var(--m3-outline-variant)", borderRadius: 10, padding: "10px 14px" }}>
+            <div style={{ background: "var(--m3-primary-container)", border: "1px solid var(--m3-outline-variant)", borderRadius: 16, padding: "10px 14px" }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: "var(--m3-on-primary-container)", marginBottom: 6 }}>
                 📅 {days}日間の旅行
               </div>
@@ -110,14 +110,14 @@ export default function TripPeriodModal({ onClose, onConfirm }: Props) {
         <div style={{ display: "flex", gap: 8, padding: "0 18px 18px" }}>
           <button
             onClick={onClose}
-            style={{ flex: 1, padding: "10px", background: "var(--m3-surface-variant)", border: "none", borderRadius: 9, color: "var(--m3-on-surface-variant)", fontSize: 13, cursor: "pointer" }}
+            style={{ flex: 1, padding: "10px", background: "var(--m3-surface-variant)", border: "none", borderRadius: 999, color: "var(--m3-on-surface-variant)", fontSize: 13, cursor: "pointer" }}
           >
             キャンセル
           </button>
           <button
             onClick={handleConfirm}
             disabled={days === 0 || days > 60}
-            style={{ flex: 2, padding: "10px", background: days > 0 && days <= 60 ? "linear-gradient(135deg,#3b82f6,#6366f1)" : "#e2e8f0", border: "none", borderRadius: 9, color: days > 0 && days <= 60 ? "#fff" : "#94a3b8", fontSize: 13, fontWeight: 700, cursor: days > 0 && days <= 60 ? "pointer" : "not-allowed" }}
+            style={{ flex: 2, padding: "10px", background: days > 0 && days <= 60 ? "linear-gradient(135deg,#3b82f6,#6366f1)" : "#e2e8f0", border: "none", borderRadius: 999, color: days > 0 && days <= 60 ? "#fff" : "#94a3b8", fontSize: 13, fontWeight: 700, cursor: days > 0 && days <= 60 ? "pointer" : "not-allowed" }}
           >
             ✅ {days > 0 ? `Day 1〜${days} を作成` : "日程を選択してください"}
           </button>
