@@ -4,7 +4,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { DC, CATS, PCATS, dsub, useTabi, showToast } from "@/contexts/TabiContext";
 import { geocodeByName } from "@/lib/geocode";
 import { hasCoord } from "@/lib/store";
-import type { TabiEvent, PoolSpot, TabiDay } from "@/lib/store";
+import type { TabiEvent, PoolSpot, TabiDay, Currency } from "@/lib/store";
 import LeafletMap from "@/components/LeafletMap";
 import EvtModal from "@/components/EvtModal";
 import PoolModal from "@/components/PoolModal";
@@ -52,7 +52,7 @@ export default function TabiApp() {
     state, trip, day, canUndo, doUndo, selTrip, delTrip, addTripWithPeriod,
     selDay, delDay, addDay, reorderDay, sortDaysByDate, updateDayName,
     changeDayDateById, updateDayLocation, updateTripField,
-    delEvt, reorderEvt, delPool, addMember, delMember, addExpense, delExpense, updateExpense,
+    delEvt, reorderEvt, delPool, addMember, delMember, addExpense, delExpense, updateExpense, updateExchangeRates,
     toast, applyRemoteTrip,
     addMemory, delMemory, toggleTripCompleted, clientId,
   } = ctx;
@@ -118,6 +118,7 @@ export default function TabiApp() {
   const [wkExpAmount, setWkExpAmount] = useState("");
   const [wkExpPayer, setWkExpPayer] = useState("");
   const [wkExpCovered, setWkExpCovered] = useState<string[]>([]);
+  const [wkExpCurrency, setWkExpCurrency] = useState<Currency>("JPY");
 
   const t = trip();
   const d = day();
@@ -235,10 +236,13 @@ export default function TabiApp() {
     if (!title || isNaN(amount) || amount <= 0) { toast("内容と金額を入力してください", "#ef4444"); return; }
     if (!wkExpPayer) { toast("支払者を選択してください", "#ef4444"); return; }
     if (!wkExpCovered.length) { toast("誰の分か選んでください", "#ef4444"); return; }
-    addExpense(title, amount, wkExpPayer, wkExpCovered);
+    if (wkExpCurrency !== "JPY" && !t?.exchangeRates?.[wkExpCurrency]) {
+      toast(`先に「${wkExpCurrency}のレート」を設定してください`, "#ef4444"); return;
+    }
+    addExpense(title, amount, wkExpPayer, wkExpCovered, wkExpCurrency);
     setWkExpTitle(""); setWkExpAmount(""); setWkExpPayer("");
     setWkExpCovered(t?.members?.map(m => m.id) || []);
-  }, [wkExpTitle, wkExpAmount, wkExpPayer, wkExpCovered, addExpense, toast, t]);
+  }, [wkExpTitle, wkExpAmount, wkExpPayer, wkExpCovered, wkExpCurrency, addExpense, toast, t]);
 
   const handleMemoImport = useCallback((eventsByDayId: Record<string, Omit<TabiEvent, "id">[]>) => {
     let total = 0;
@@ -420,11 +424,13 @@ export default function TabiApp() {
                 wkExpAmount={wkExpAmount} setWkExpAmount={setWkExpAmount}
                 wkExpPayer={wkExpPayer} setWkExpPayer={setWkExpPayer}
                 wkExpCovered={wkExpCovered} setWkExpCovered={setWkExpCovered}
+                wkExpCurrency={wkExpCurrency} setWkExpCurrency={setWkExpCurrency}
                 onAddMember={handleAddMember}
                 onDelMember={delMember}
                 onAddExpense={handleAddExpense}
                 onDelExpense={delExpense}
                 onUpdateExpense={updateExpense}
+                onUpdateExchangeRates={updateExchangeRates}
               />
             )}
             {tab === "countdown" && <CountdownView trip={t ?? null} />}

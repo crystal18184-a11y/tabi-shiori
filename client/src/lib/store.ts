@@ -55,12 +55,32 @@ export interface Member {
   name: string;
 }
 
+export type Currency = "JPY" | "USD" | "EUR";
+
 export interface Expense {
   id: string;
   title: string;
   amount: number;
+  /** 支出の通貨。未設定は既存データ互換のためJPY扱い */
+  currency?: Currency;
   payerId: string;
   coveredMemberIds: string[];
+}
+
+export const CURRENCY_SYMBOLS: Record<Currency, string> = { JPY: "¥", USD: "$", EUR: "€" };
+
+/** 通貨に応じた金額表示（JPYは整数、USD/EURは小数点2桁） */
+export function formatCurrency(amount: number, currency: Currency = "JPY"): string {
+  const symbol = CURRENCY_SYMBOLS[currency];
+  if (currency === "JPY") return `${symbol}${Math.round(amount).toLocaleString()}`;
+  return `${symbol}${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+/** 支出の金額を円に換算する。JPYはそのまま、USD/EURはtripのexchangeRatesを使う（未設定は1:1扱い） */
+export function toJpy(amount: number, currency: Currency | undefined, exchangeRates?: { USD?: number; EUR?: number }): number {
+  if (!currency || currency === "JPY") return amount;
+  const rate = exchangeRates?.[currency];
+  return rate ? amount * rate : amount;
 }
 
 export interface Memory {
@@ -82,6 +102,8 @@ export interface Trip {
   days: TabiDay[];
   memories?: Memory[];
   status?: 'planning' | 'completed';
+  /** 1USD/1EURあたりの円レート（割り勘の通貨換算に使う。ユーザーが手動設定） */
+  exchangeRates?: { USD?: number; EUR?: number };
 }
 
 export interface AppState {
@@ -198,15 +220,16 @@ export function saveState(state: AppState) {
   }
 }
 
-export function calcSettlements(members: Member[], expenses: Expense[]) {
+export function calcSettlements(members: Member[], expenses: Expense[], exchangeRates?: { USD?: number; EUR?: number }) {
   const bal: Record<string, number> = {};
   members.forEach(m => (bal[m.id] = 0));
   expenses.forEach(e => {
     const cov = e.coveredMemberIds || [];
     if (!cov.length) return;
-    const pp = e.amount / cov.length;
+    const amountJpy = toJpy(e.amount, e.currency, exchangeRates);
+    const pp = amountJpy / cov.length;
     cov.forEach(mid => { if (bal[mid] !== undefined) bal[mid] -= pp; });
-    if (bal[e.payerId] !== undefined) bal[e.payerId] += e.amount;
+    if (bal[e.payerId] !== undefined) bal[e.payerId] += amountJpy;
   });
   const pos = members.filter(m => bal[m.id] > 0.5).map(m => ({ ...m, b: bal[m.id] })).sort((a, b) => b.b - a.b);
   const neg = members.filter(m => bal[m.id] < -0.5).map(m => ({ ...m, b: bal[m.id] })).sort((a, b) => a.b - b.b);

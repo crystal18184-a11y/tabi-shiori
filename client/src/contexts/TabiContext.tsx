@@ -1,7 +1,7 @@
 // 旅のしおり - アプリ全体のステート管理コンテキスト
 import React, { createContext, useCallback, useContext, useState } from "react";
 import {
-  AppState, DC, Memory, PoolSpot, TabiDay, TabiEvent, Trip,
+  AppState, Currency, DC, Memory, PoolSpot, TabiDay, TabiEvent, Trip,
   defTrip, dsub, loadState, saveState, uid
 } from "@/lib/store";
 import { useDataPersistence } from "@/hooks/useDataPersistence";
@@ -48,9 +48,10 @@ interface TabiContextType {
   delPool: (pid: string) => void;
   addMember: (name: string) => string | null;
   delMember: (id: string) => void;
-  addExpense: (title: string, amount: number, payerId: string, coveredIds: string[]) => void;
+  addExpense: (title: string, amount: number, payerId: string, coveredIds: string[], currency?: Currency) => void;
   delExpense: (id: string) => void;
-  updateExpense: (id: string, data: { title: string; amount: number; payerId: string; coveredMemberIds: string[] }) => void;
+  updateExpense: (id: string, data: { title: string; amount: number; currency?: Currency; payerId: string; coveredMemberIds: string[] }) => void;
+  updateExchangeRates: (rates: { USD?: number; EUR?: number }) => void;
   getDayColor: (dayId: string) => string;
   getDayIndex: (dayId: string) => number;
   toast: (msg: string, color?: string) => void;
@@ -389,13 +390,21 @@ export function TabiProvider({ children }: { children: React.ReactNode }) {
     }));
   }, [snap, update]);
 
-  const addExpense = useCallback((title: string, amount: number, payerId: string, coveredIds: string[]) => {
+  const addExpense = useCallback((title: string, amount: number, payerId: string, coveredIds: string[], currency?: Currency) => {
     snap();
     update(prev => ({
       ...prev,
       trips: prev.trips.map(t => t.id !== prev.tid ? t : {
-        ...t, expenses: [...(t.expenses || []), { id: uid(), title, amount, payerId, coveredMemberIds: coveredIds }]
+        ...t, expenses: [...(t.expenses || []), { id: uid(), title, amount, currency, payerId, coveredMemberIds: coveredIds }]
       })
+    }));
+  }, [snap, update]);
+
+  const updateExchangeRates = useCallback((rates: { USD?: number; EUR?: number }) => {
+    snap();
+    update(prev => ({
+      ...prev,
+      trips: prev.trips.map(t => t.id === prev.tid ? { ...t, exchangeRates: { ...t.exchangeRates, ...rates } } : t)
     }));
   }, [snap, update]);
 
@@ -409,7 +418,7 @@ export function TabiProvider({ children }: { children: React.ReactNode }) {
     }));
   }, [snap, update]);
 
-  const updateExpense = useCallback((id: string, data: { title: string; amount: number; payerId: string; coveredMemberIds: string[] }) => {
+  const updateExpense = useCallback((id: string, data: { title: string; amount: number; currency?: Currency; payerId: string; coveredMemberIds: string[] }) => {
     snap();
     update(prev => ({
       ...prev,
@@ -474,7 +483,7 @@ export function TabiProvider({ children }: { children: React.ReactNode }) {
       addDay, selDay, delDay, changeDayDate,
       reorderDay, sortDaysByDate, updateDayName, changeDayDateById, updateDayLocation,
       saveEvt, delEvt, reorderEvt, moveEvtToDay, savePool, delPool,
-      addMember, delMember, addExpense, delExpense, updateExpense,
+      addMember, delMember, addExpense, delExpense, updateExpense, updateExchangeRates,
       getDayColor, getDayIndex, toast, applyRemoteTrip, clientId,
       addMemory, delMemory, toggleTripCompleted
     }}>

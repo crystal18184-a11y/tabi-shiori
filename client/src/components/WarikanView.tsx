@@ -1,6 +1,9 @@
-// 割り勘ビュー（Tailwind CSS化・アクセシビリティ対応済み）
+// 割り勘ビュー（Tailwind CSS化・アクセシビリティ対応済み・多通貨対応）
 import React from "react";
-import type { Trip } from "@/lib/store";
+import type { Trip, Currency } from "@/lib/store";
+import { formatCurrency, toJpy } from "@/lib/store";
+
+const CURRENCIES: Currency[] = ["JPY", "USD", "EUR"];
 
 interface Props {
   trip: Trip | null;
@@ -9,22 +12,29 @@ interface Props {
   wkExpAmount: string; setWkExpAmount: (v: string) => void;
   wkExpPayer: string; setWkExpPayer: (v: string) => void;
   wkExpCovered: string[]; setWkExpCovered: (v: string[]) => void;
+  wkExpCurrency: Currency; setWkExpCurrency: (v: Currency) => void;
   onAddMember: () => void;
   onDelMember: (id: string) => void;
   onAddExpense: () => void;
   onDelExpense: (id: string) => void;
-  onUpdateExpense: (id: string, data: { title: string; amount: number; payerId: string; coveredMemberIds: string[] }) => void;
+  onUpdateExpense: (id: string, data: { title: string; amount: number; currency?: Currency; payerId: string; coveredMemberIds: string[] }) => void;
+  onUpdateExchangeRates: (rates: { USD?: number; EUR?: number }) => void;
 }
 
-function calcSettlements(members: { id: string; name: string }[], expenses: { id: string; amount: number; payerId: string; coveredMemberIds: string[] }[]) {
+function calcSettlements(
+  members: { id: string; name: string }[],
+  expenses: { id: string; amount: number; currency?: Currency; payerId: string; coveredMemberIds: string[] }[],
+  exchangeRates?: { USD?: number; EUR?: number }
+) {
   const bal: Record<string, number> = {};
   members.forEach(m => (bal[m.id] = 0));
   expenses.forEach(e => {
     const cov = e.coveredMemberIds || [];
     if (!cov.length) return;
-    const pp = e.amount / cov.length;
+    const amountJpy = toJpy(e.amount, e.currency, exchangeRates);
+    const pp = amountJpy / cov.length;
     cov.forEach(mid => { if (bal[mid] !== undefined) bal[mid] -= pp; });
-    if (bal[e.payerId] !== undefined) bal[e.payerId] += e.amount;
+    if (bal[e.payerId] !== undefined) bal[e.payerId] += amountJpy;
   });
   const pos = members.filter(m => bal[m.id] > 0.5).map(m => ({ ...m, b: bal[m.id] })).sort((a, b) => b.b - a.b);
   const neg = members.filter(m => bal[m.id] < -0.5).map(m => ({ ...m, b: bal[m.id] })).sort((a, b) => a.b - b.b);
@@ -44,24 +54,39 @@ function calcSettlements(members: { id: string; name: string }[], expenses: { id
 export default function WarikanView({
   trip, wkMemberName, setWkMemberName, wkExpTitle, setWkExpTitle,
   wkExpAmount, setWkExpAmount, wkExpPayer, setWkExpPayer,
-  wkExpCovered, setWkExpCovered, onAddMember, onDelMember, onAddExpense, onDelExpense, onUpdateExpense,
+  wkExpCovered, setWkExpCovered, wkExpCurrency, setWkExpCurrency,
+  onAddMember, onDelMember, onAddExpense, onDelExpense, onUpdateExpense, onUpdateExchangeRates,
 }: Props) {
   const members = trip?.members || [];
   const expenses = trip?.expenses || [];
-  const settlements = members.length >= 2 ? calcSettlements(members, expenses) : [];
-  const total = expenses.reduce((s, e) => s + e.amount, 0);
+  const exchangeRates = trip?.exchangeRates;
+  const settlements = members.length >= 2 ? calcSettlements(members, expenses, exchangeRates) : [];
+  const totalJpy = expenses.reduce((s, e) => s + toJpy(e.amount, e.currency, exchangeRates), 0);
+
+  // レート入力欄の一時状態（未編集時はtripの値を表示）
+  const [rateUsdInput, setRateUsdInput] = React.useState(String(exchangeRates?.USD ?? ""));
+  const [rateEurInput, setRateEurInput] = React.useState(String(exchangeRates?.EUR ?? ""));
+  React.useEffect(() => { setRateUsdInput(String(exchangeRates?.USD ?? "")); }, [exchangeRates?.USD]);
+  React.useEffect(() => { setRateEurInput(String(exchangeRates?.EUR ?? "")); }, [exchangeRates?.EUR]);
+
+  function saveRate(currency: "USD" | "EUR", value: string) {
+    const n = parseFloat(value);
+    onUpdateExchangeRates({ [currency]: isNaN(n) || n <= 0 ? undefined : n });
+  }
 
   // 編集モーダル状態
   const [editingExpId, setEditingExpId] = React.useState<string | null>(null);
   const [editTitle, setEditTitle] = React.useState("");
   const [editAmount, setEditAmount] = React.useState("");
+  const [editCurrency, setEditCurrency] = React.useState<Currency>("JPY");
   const [editPayer, setEditPayer] = React.useState("");
   const [editCovered, setEditCovered] = React.useState<string[]>([]);
 
-  function startEditExp(e: { id: string; title: string; amount: number; payerId: string; coveredMemberIds: string[] }) {
+  function startEditExp(e: { id: string; title: string; amount: number; currency?: Currency; payerId: string; coveredMemberIds: string[] }) {
     setEditingExpId(e.id);
     setEditTitle(e.title);
     setEditAmount(String(e.amount));
+    setEditCurrency(e.currency || "JPY");
     setEditPayer(e.payerId);
     setEditCovered(e.coveredMemberIds || []);
   }
@@ -71,7 +96,8 @@ export default function WarikanView({
     const amount = parseFloat(editAmount);
     if (!editTitle.trim() || isNaN(amount) || amount <= 0) { alert("内容と金額を入力してください"); return; }
     if (!editCovered.length) { alert("誰の分か選んでください"); return; }
-    onUpdateExpense(editingExpId, { title: editTitle.trim(), amount, payerId: editPayer, coveredMemberIds: editCovered });
+    if (editCurrency !== "JPY" && !exchangeRates?.[editCurrency]) { alert(`先に「${editCurrency}のレート」を設定してください`); return; }
+    onUpdateExpense(editingExpId, { title: editTitle.trim(), amount, currency: editCurrency, payerId: editPayer, coveredMemberIds: editCovered });
     setEditingExpId(null);
   }
 
@@ -111,6 +137,40 @@ export default function WarikanView({
         </div>
       </div>
 
+      {/* レート設定 */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-3">
+        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">💱 為替レート設定</h3>
+        <p className="text-[10px] text-slate-400 mb-2">USD・EURの支出を円換算するためのレートです。最新レートはご自身でご確認の上、手入力してください。</p>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-slate-600 w-24 shrink-0">1 USD =</span>
+            <input
+              type="number" min="0" step="0.01"
+              value={rateUsdInput}
+              onChange={e => setRateUsdInput(e.target.value)}
+              onBlur={e => saveRate("USD", e.target.value)}
+              placeholder="例: 150"
+              aria-label="USDレート（1USDあたりの円）"
+              className="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-1.5 outline-none focus:border-blue-300 transition-colors"
+            />
+            <span className="text-xs text-slate-500">円</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-slate-600 w-24 shrink-0">1 EUR =</span>
+            <input
+              type="number" min="0" step="0.01"
+              value={rateEurInput}
+              onChange={e => setRateEurInput(e.target.value)}
+              onBlur={e => saveRate("EUR", e.target.value)}
+              placeholder="例: 160"
+              aria-label="EURレート（1EURあたりの円）"
+              className="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-1.5 outline-none focus:border-blue-300 transition-colors"
+            />
+            <span className="text-xs text-slate-500">円</span>
+          </div>
+        </div>
+      </div>
+
       {/* 支出追加 */}
       {members.length >= 2 && (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-3">
@@ -123,15 +183,25 @@ export default function WarikanView({
               aria-label="支出の内容"
               className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none w-full box-border focus:border-blue-300 transition-colors"
             />
-            <input
-              type="number"
-              value={wkExpAmount}
-              onChange={e => setWkExpAmount(e.target.value)}
-              placeholder="金額（円）"
-              aria-label="金額"
-              min="0"
-              className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none w-full box-border focus:border-blue-300 transition-colors"
-            />
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={wkExpAmount}
+                onChange={e => setWkExpAmount(e.target.value)}
+                placeholder="金額"
+                aria-label="金額"
+                min="0"
+                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none w-full box-border focus:border-blue-300 transition-colors"
+              />
+              <select
+                value={wkExpCurrency}
+                onChange={e => setWkExpCurrency(e.target.value as Currency)}
+                aria-label="通貨を選択"
+                className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2 py-2 outline-none cursor-pointer focus:border-blue-300 transition-colors"
+              >
+                {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
             <div>
               <label className="text-[11px] font-bold text-slate-500 block mb-1">支払者</label>
               <select
@@ -176,6 +246,8 @@ export default function WarikanView({
             {expenses.map(e => {
               const payer = members.find(m => m.id === e.payerId);
               const covered = members.filter(m => e.coveredMemberIds?.includes(m.id));
+              const currency = e.currency || "JPY";
+              const jpy = toJpy(e.amount, currency, exchangeRates);
               return (
                 <div key={e.id} className="flex items-center gap-2 py-1.5 border-b border-slate-100 last:border-0">
                   <div className="flex-1 min-w-0">
@@ -184,7 +256,10 @@ export default function WarikanView({
                       {payer?.name}が支払い・{covered.map(m => m.name).join("・")}の分
                     </div>
                   </div>
-                  <span className="text-sm font-bold text-slate-900 whitespace-nowrap">¥{e.amount.toLocaleString()}</span>
+                  <div className="text-right whitespace-nowrap">
+                    <div className="text-sm font-bold text-slate-900">{formatCurrency(e.amount, currency)}</div>
+                    {currency !== "JPY" && <div className="text-[10px] text-slate-400">≈ {formatCurrency(jpy, "JPY")}</div>}
+                  </div>
                   <button
                     onClick={() => startEditExp(e)}
                     aria-label={`${e.title}を編集`}
@@ -200,7 +275,7 @@ export default function WarikanView({
             })}
           </div>
           <div className="text-right text-sm font-bold text-slate-700">
-            合計: ¥{total.toLocaleString()}
+            合計: {formatCurrency(totalJpy, "JPY")}
           </div>
         </div>
       )}
@@ -218,9 +293,17 @@ export default function WarikanView({
                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">内容</label>
                 <input value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="例：夕食" className="w-full bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors" />
               </div>
-              <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">金額（円）</label>
-                <input type="number" value={editAmount} onChange={e => setEditAmount(e.target.value)} placeholder="金額" min="0" className="w-full bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors" />
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">金額</label>
+                  <input type="number" value={editAmount} onChange={e => setEditAmount(e.target.value)} placeholder="金額" min="0" className="w-full bg-slate-50 border border-slate-200 rounded-lg text-sm px-2.5 py-2 outline-none focus:border-blue-300 transition-colors" />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">通貨</label>
+                  <select value={editCurrency} onChange={e => setEditCurrency(e.target.value as Currency)} className="bg-slate-50 border border-slate-200 rounded-lg text-sm px-2 py-2 outline-none cursor-pointer focus:border-blue-300 transition-colors">
+                    {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
               </div>
               <div>
                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">支払者</label>
@@ -259,7 +342,7 @@ export default function WarikanView({
                 <span className="text-sm font-bold text-slate-700">{s.fromName}</span>
                 <span className="text-slate-400">→</span>
                 <span className="text-sm font-bold text-slate-700">{s.toName}</span>
-                <span className="ml-auto text-sm font-extrabold text-green-700">¥{s.amount.toLocaleString()}</span>
+                <span className="ml-auto text-sm font-extrabold text-green-700">{formatCurrency(s.amount, "JPY")}</span>
               </div>
             ))}
           </div>

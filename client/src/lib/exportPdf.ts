@@ -2,7 +2,7 @@
 // jsPDFを使ってフロントエンドで直接PDFを生成する（日本語対応・写真埋め込み対応）
 import jsPDF from "jspdf";
 import type { Trip, TabiDay, TabiEvent } from "@/lib/store";
-import { CATS } from "@/lib/store";
+import { CATS, formatCurrency, toJpy } from "@/lib/store";
 
 const COLORS = {
   primary: [15, 23, 42] as [number, number, number],       // #0f172a
@@ -368,17 +368,21 @@ export async function exportTripPdf(trip: Trip): Promise<void> {
     text("■ 割り勘", MARGIN + 3, y + 7, 10, COLORS.white, "left", true);
     y += 13;
 
-    const total = (trip.expenses || []).reduce((s, e) => s + e.amount, 0);
-    text(`合計: ¥${total.toLocaleString()}`, MARGIN, y, 10, COLORS.primary, "left", true);
+    const totalJpy = (trip.expenses || []).reduce((s, e) => s + toJpy(e.amount, e.currency, trip.exchangeRates), 0);
+    text(`合計: ${formatCurrency(totalJpy, "JPY")}`, MARGIN, y, 10, COLORS.primary, "left", true);
     y += 7;
 
     for (const exp of (trip.expenses || [])) {
       checkPageBreak(8);
       const payer = (trip.members || []).find(m => m.id === exp.payerId)?.name || "不明";
+      const currency = exp.currency || "JPY";
+      const amountLabel = currency === "JPY"
+        ? formatCurrency(exp.amount, "JPY")
+        : `${formatCurrency(exp.amount, currency)} (≈${formatCurrency(toJpy(exp.amount, currency, trip.exchangeRates), "JPY")})`;
       doc.setFontSize(8);
       doc.setTextColor(...COLORS.subtext);
       doc.setFont(JP_FONT, "bold");
-      doc.text(`• ${exp.title}  ¥${exp.amount.toLocaleString()}  (支払: ${payer})`, MARGIN + 2, y);
+      doc.text(`• ${exp.title}  ${amountLabel}  (支払: ${payer})`, MARGIN + 2, y);
       y += 6;
     }
   }
